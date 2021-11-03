@@ -1,0 +1,5 @@
+{
+  "type": "mkdrinks:crucible",
+  "ingredients": [{"item": "mkdrinks:bottle_blend"}],
+  "output": {"item": "mkdrinks:drink_bottle"}
+}

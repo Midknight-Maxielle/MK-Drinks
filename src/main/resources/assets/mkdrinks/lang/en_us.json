@@ -1,0 +1,39 @@
+{
+
+  "block.mkdrinks.crucible": "Crucible",
+  "screen.mkdrinks.crucible": "Crucible",
+
+  "item.mkdrinks.drink_bottle": "Drink Bottle",
+  "item.mkdrinks.big_drink_bottle": "Big Drink Bottle",
+
+  "item.mkdrinks.bottle_blend": "Bottle Blend",
+  "item.mkdrinks.metallized_blend": "Metallized Blend",
+  "item.mkdrinks.drinkmetal_blend": "Drinkmetal Blend",
+
+  "item.mkdrinks.drinkmetal_ingot": "Drinkmetal Ingot",
+
+  "item.mkdrinks.apple_drink": "Apple Drink",
+  "item.mkdrinks.beetroot_drink": "Beetroot Drink",
+  "item.mkdrinks.sapling_drink": "Root Drink",
+  "item.mkdrinks.carrot_drink": "Carrot Drink",
+  "item.mkdrinks.cocoa_drink": "Chocolate Drink",
+  "item.mkdrinks.egg_drink": "Eggnog Drink",
+  "item.mkdrinks.kelp_drink": "Kelp Drink",
+  "item.mkdrinks.mushroom_drink": "Mushroom Drink",
+
+  "item.mkdrinks.sweet_drink": "Sweet Drink",
+  "item.mkdrinks.vegetable_drink": "Vegetable Drink",
+  "item.mkdrinks.leafy_drink": "Leafy Drink",
+  "item.mkdrinks.weird_drink": "Weird Drink",
+
+  "item.mkdrinks.drinkmetal_bow": "Drinkmetal Bow",
+  "item.mkdrinks.drinkmetal_boots": "Drinkmetal Boots",
+  "item.mkdrinks.drinkmetal_chestplate": "Drinkmetal Chestplate",
+  "item.mkdrinks.drinkmetal_leggings": "Drinkmetal Leggings",
+  "item.mkdrinks.drinkmetal_helmet": "Drinkmetal Helmet",
+
+  "itemGroup.mkCreativeTab": "MK Drinks",
+
+  "tooltip.mkdrinks.crucible":"Hold \u00A7eSHIFT\u00A7r for more information.",
+  "tooltip.mkdrinks.crucible_shift": "Must be placed above a campfire or similar heat source to function."
+}

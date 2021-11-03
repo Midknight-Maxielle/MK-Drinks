@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":[
+    "WIW",
+    " B ",
+    "   "
+  ],
+  "key": {
+    "B": { "item": "mkdrinks:drink_bottle" },
+    "I": { "item": "minecraft:apple" },
+    "W": { "tag": "forge:crops/wheat" }
+  },
+  "result": {
+    "item": "mkdrinks:apple_drink",
+    "count": 1
+  }
+}

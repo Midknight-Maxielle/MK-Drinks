@@ -1,0 +1,5 @@
+{
+  "type": "mkdrinks:crucible",
+  "ingredients": [{"item": "minecraft:sand"}],
+  "output": {"item": "minecraft:glass"}
+}

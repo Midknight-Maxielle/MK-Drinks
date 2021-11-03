@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":[
+    " B ",
+    "BDB",
+    " B "
+  ],
+  "key": {
+    "B": { "item": "mkdrinks:drink_bottle" },
+    "D": { "item": "mkdrinks:bottle_blend"}
+  },
+  "result": {
+    "item": "mkdrinks:big_drink_bottle",
+    "count": 2
+  }
+}

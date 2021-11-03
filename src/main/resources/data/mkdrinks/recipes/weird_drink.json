@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":[
+    "   ",
+    "OBT",
+    "   "
+  ],
+  "key": {
+    "B": { "item": "mkdrinks:big_drink_bottle" },
+    "O": { "item": "mkdrinks:kelp_drink" },
+    "T": { "item": "mkdrinks:mushroom_drink" }
+  },
+  "result": {
+    "item": "mkdrinks:weird_drink",
+    "count": 1
+  }
+}

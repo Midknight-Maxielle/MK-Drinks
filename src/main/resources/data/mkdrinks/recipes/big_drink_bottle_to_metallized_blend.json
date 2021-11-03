@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mkdrinks:big_drink_bottle"
+    }
+  ],
+  "result": {
+    "item": "mkdrinks:metallized_blend",
+    "count": 4
+  }
+}

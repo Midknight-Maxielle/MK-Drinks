@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "mkdrinks:apple_drink",
+    "mkdrinks:beetroot_drink",
+    "mkdrinks:sapling_drink",
+    "mkdrinks:carrot_drink",
+    "mkdrinks:cocoa_drink",
+    "mkdrinks:egg_drink",
+    "mkdrinks:kelp_drink",
+    "mkdrinks:mushroom_drink"
+  ]
+}

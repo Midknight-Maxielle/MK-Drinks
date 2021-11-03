@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "D D",
+    "DDD",
+    "DDD"
+  ],
+  "key": {
+    "D": {"item": "mkdrinks:drinkmetal_ingot"}
+  },
+  "result": {
+    "item": "mkdrinks:drinkmetal_chestplate",
+    "count": 1
+  }
+}

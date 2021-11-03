@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":[
+    "AL ",
+    "LA ",
+    "   "
+  ],
+  "key": {
+    "A": { "item": "mkdrinks:metallized_blend" },
+    "L": { "item": "minecraft:lapis_lazuli" }
+    },
+  "result": {
+    "item": "mkdrinks:drinkmetal_blend",
+    "count": 4
+  }
+}
