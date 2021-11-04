@@ -109,7 +109,7 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
 
     private void crucibleProcess(ItemStack result, boolean heated) {
 
-        processTotal = 100;
+        processTotal = 200;
 
         if(heated && processActive) {
             if(processElapsed == processTotal) {
