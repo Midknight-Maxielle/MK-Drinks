@@ -27,11 +27,18 @@ public class MKBlocks {
     public static final RegistryObject<Block> BOTTLE_GLASS = registerBlock("bottle_glass",
             () -> new BottleGlassBlock(AbstractBlock
                     .Properties.create(Material.GLASS)
-                    .hardnessAndResistance(2.0F)
+                    .sound(SoundType.GLASS)
+                    .hardnessAndResistance(1.0F)
                     .notSolid()
                     .setOpaque(MKBlocks::isntSolid)
                     .setBlocksVision(MKBlocks::isntSolid)
             ));
+
+    public static final RegistryObject<Block> BOTTLE_GLASS_PANE = registerBlock("bottle_glass_pane",
+            () -> new PaneBlock(AbstractBlock.Properties.create(Material.GLASS)
+                    .sound(SoundType.GLASS)
+                    .hardnessAndResistance(1.0F)
+                    .notSolid()));
 
     // - - - - -  Tile Entity Blocks - - - - - //
     // - - - - - - - - - - - - - - - - - - - - //

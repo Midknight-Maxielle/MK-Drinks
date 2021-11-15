@@ -88,6 +88,7 @@ public class MKDrinks
 
             RenderTypeLookup.setRenderLayer(MKBlocks.CRUCIBLE.get(), RenderType.getCutout());
             RenderTypeLookup.setRenderLayer(MKBlocks.BOTTLE_GLASS.get(), RenderType.getCutout());
+            RenderTypeLookup.setRenderLayer(MKBlocks.BOTTLE_GLASS_PANE.get(), RenderType.getCutout());
 
             MKItemModelProperties.makeBow(MKGearItems.DRINKMETAL_BOW.get());
 

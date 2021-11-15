@@ -33,9 +33,6 @@ public class MKMiscItems {
     // Dusts & Ingots //
     // ============== //
 
-    public static final RegistryObject<Item> BOTTLE_BLEND = ITEMS.register("bottle_blend",
-            () -> new Item(new Item.Properties().group(MKCreativeTab.MKDRINKS)));
-
     public static final RegistryObject<Item> METALLIZED_BLEND = ITEMS.register("metallized_blend",
             () -> new Item(new Item.Properties().group(MKCreativeTab.MKDRINKS)));
 

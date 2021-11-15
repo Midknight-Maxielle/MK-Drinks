@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern":[
-    " G ",
-    "G G",
-    " G "
+    "GGG",
+    "GGG",
+    "   "
   ],
   "key": {
     "G": { "item": "mkdrinks:bottle_glass_pane" }
   },
   "result": {
-    "item": "mkdrinks:drink_bottle",
-    "count": 2
+    "item": "mkdrinks:bottle_glass_pane",
+    "count": 16
   }
 }

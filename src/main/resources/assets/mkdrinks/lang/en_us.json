@@ -4,11 +4,11 @@
   "screen.mkdrinks.crucible": "Crucible",
 
   "block.mkdrinks.bottle_glass": "Bottle Glass",
+  "block.mkdrinks.bottle_glass_pane": "Bottle Glass Pane",
 
   "item.mkdrinks.drink_bottle": "Drink Bottle",
   "item.mkdrinks.big_drink_bottle": "Big Drink Bottle",
 
-  "item.mkdrinks.bottle_blend": "Bottle Blend",
   "item.mkdrinks.metallized_blend": "Metallized Blend",
   "item.mkdrinks.drinkmetal_blend": "Drinkmetal Blend",
 
