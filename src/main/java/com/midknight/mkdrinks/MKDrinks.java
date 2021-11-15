@@ -85,7 +85,10 @@ public class MKDrinks
         event.enqueueWork(() -> {
 
             ScreenManager.registerFactory(MKContainers.CRUCIBLE_CONTAINER.get(), CrucibleScreen::new);
+
             RenderTypeLookup.setRenderLayer(MKBlocks.CRUCIBLE.get(), RenderType.getCutout());
+            RenderTypeLookup.setRenderLayer(MKBlocks.BOTTLE_GLASS.get(), RenderType.getCutout());
+
             MKItemModelProperties.makeBow(MKGearItems.DRINKMETAL_BOW.get());
 
         });
