@@ -6,7 +6,7 @@
     "   "
   ],
   "key": {
-    "G": { "item": "mkdrinks:bottle_glass_pane" }
+    "G": { "item": "mkdrinks:bottle_glass" }
   },
   "result": {
     "item": "mkdrinks:bottle_glass_pane",
