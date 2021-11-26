@@ -12,7 +12,7 @@
     "C": {"item": "minecraft:cobblestone"}
   },
   "result": {
-    "item": "mkdrinks:crucible",
+    "item": "mkdrinks:crucible_block",
     "count": 1
   }
 }
