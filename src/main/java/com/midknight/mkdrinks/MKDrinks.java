@@ -2,7 +2,7 @@ package com.midknight.mkdrinks;
 
 import com.midknight.mkdrinks.block.MKBlocks;
 import com.midknight.mkdrinks.container.MKContainers;
-import com.midknight.mkdrinks.data.recipes.MKRecipeTypes;
+import com.midknight.mkdrinks.data.recipes.DrinksRecipes;
 import com.midknight.mkdrinks.item.MKGearItems;
 import com.midknight.mkdrinks.item.MKItemsRegistry;
 import com.midknight.mkdrinks.item.MKMiscItems;
@@ -21,10 +21,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -37,14 +34,14 @@ public class MKDrinks
 {
 
     public static final String MOD_ID = "mkdrinks";
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static MKDrinks INSTANCE;
+
+    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public MKDrinks() {
 
-        // foreshortens the Event Bus call to make it easier to work with. //
+        INSTANCE = this;
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        // Registers the mod items to the Event Bus. //
 
         MKMiscItems.register(eventBus);
         LOGGER.info("MKDrinks - Materials loaded!");
@@ -57,9 +54,10 @@ public class MKDrinks
 
         MKBlocks.register(eventBus);
         MKContainers.register(eventBus);
-        MKRecipeTypes.register(eventBus);
         MKTileEntities.register(eventBus);
         MKItemsRegistry.register(eventBus);
+
+        DrinksRecipes.RECIPES.register(eventBus);
 
         // Register the setup method for modloading //
         eventBus.addListener(this::setup);
@@ -71,6 +69,9 @@ public class MKDrinks
         MinecraftForge.EVENT_BUS.register(this);
 
         LOGGER.info("MKDrinks - fully loaded!");
+    }
+
+    private void serverSetup(final FMLDedicatedServerSetupEvent event) {
     }
 
     private void setup(final FMLCommonSetupEvent event)

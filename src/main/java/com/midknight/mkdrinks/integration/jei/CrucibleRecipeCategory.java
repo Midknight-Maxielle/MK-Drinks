@@ -23,7 +23,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
     private final IDrawable heat;
 
     public CrucibleRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 0, 0, 176, 85);
+        this.background = helper.createDrawable(TEXTURE, 5, 5, 166, 75);
         this.icon = helper.createDrawableIngredient(new ItemStack(MKBlocks.CRUCIBLE.get()));
         this.heat = helper.createDrawable(TEXTURE, 176, 13, 16, 17);
     }
@@ -62,8 +62,8 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, CrucibleRecipe recipe, IIngredients ingredients) {
 
-        recipeLayout.getItemStacks().init(0,true,53,43);
-        recipeLayout.getItemStacks().init(1,false, 108,43);
+        recipeLayout.getItemStacks().init(0,true,47,37);
+        recipeLayout.getItemStacks().init(1,false, 102,37);
         recipeLayout.getItemStacks().set(ingredients);
 
     }
@@ -71,7 +71,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
     @Override
     public void draw(CrucibleRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
 
-        this.heat.draw(matrixStack, 79,62);
+        this.heat.draw(matrixStack, 74,57);
 
         IRecipeCategory.super.draw(recipe, matrixStack, mouseX, mouseY);
     }

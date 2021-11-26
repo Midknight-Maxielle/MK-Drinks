@@ -37,7 +37,7 @@ public class ModTags {
             return BlockTags.createOptional(new ResourceLocation(MKDrinks.MOD_ID, name));
         }
 
-        private static Tags.IOptionalNamedTag<Block> HEAT_SOURCES =
+        private static final Tags.IOptionalNamedTag<Block> HEAT_SOURCES =
                 createTag("heat_sources");
 
         private static Tags.IOptionalNamedTag<Block> createForgeTag(String name) {

@@ -2,13 +2,15 @@ package com.midknight.mkdrinks.tileentity;
 
 import com.midknight.mkdrinks.block.CrucibleBlock;
 import com.midknight.mkdrinks.data.recipes.CrucibleRecipe;
-import com.midknight.mkdrinks.data.recipes.MKRecipeTypes;
+import com.midknight.mkdrinks.data.recipes.DrinksRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.IIntArray;
 import net.minecraftforge.common.capabilities.Capability;
@@ -16,6 +18,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,13 +28,20 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
 
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
+
     protected final IIntArray crucibleData;
+    protected final IRecipeType<CrucibleRecipe> recipeType;
 
     // // // // CONSTRUCTOR // // // //
 
-    public CrucibleTile() {
-        super(MKTileEntities.CRUCIBLE_TILE.get());
+    public CrucibleTile(TileEntityType<?> tileEntity, IRecipeType<CrucibleRecipe> recipeType) {
+        super(tileEntity);
+        this.recipeType = recipeType;
         this.crucibleData = createIntArray();
+    }
+
+    public CrucibleTile() {
+    this(MKTileEntities.CRUCIBLE_TILE.get(), CrucibleRecipe.TYPE);
     }
 
     // // // // NBT PKT MANAGEMENT // // // //
@@ -83,7 +93,11 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
 
             if (hasInput() && isHeated()) {
 
-                Optional<CrucibleRecipe> recipe = world.getRecipeManager().getRecipe(MKRecipeTypes.CRUCIBLE_RECIPE, inv, world);
+                Optional<CrucibleRecipe> recipe = Optional.ofNullable(this.world.getRecipeManager().getRecipe(
+                        this.recipeType,
+                        new RecipeWrapper(itemHandler),
+                        world).orElse(null));
+
                 recipe.ifPresent(iRecipe -> {
                     processActive = true;
                     ItemStack result = iRecipe.getRecipeOutput();

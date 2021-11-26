@@ -43,7 +43,7 @@ public class MKBlocks {
     // - - - - -  Tile Entity Blocks - - - - - //
     // - - - - - - - - - - - - - - - - - - - - //
 
-    public static final RegistryObject<Block> CRUCIBLE = registerBlock("crucible",
+    public static final RegistryObject<Block> CRUCIBLE = registerBlock("crucible_block",
             () -> new CrucibleBlock(AbstractBlock
                     .Properties.create(Material.CLAY)
                     .hardnessAndResistance(4)));

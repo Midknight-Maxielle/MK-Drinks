@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "mkdrinks:crucible"
+          "name": "mkdrinks:crucible_block"
         }
       ]
     }

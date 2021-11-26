@@ -13,7 +13,7 @@ public class MKTileEntities {
     public static DeferredRegister<TileEntityType<?>> TILE_ENTITIES =
             DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, MKDrinks.MOD_ID);
 
-    public static RegistryObject<TileEntityType<CrucibleTile>> CRUCIBLE_TILE =
+    public static final RegistryObject<TileEntityType<CrucibleTile>> CRUCIBLE_TILE =
             TILE_ENTITIES.register("crucible_tile", () -> TileEntityType.Builder.create(
                     CrucibleTile::new, MKBlocks.CRUCIBLE.get()).build(null));
 
