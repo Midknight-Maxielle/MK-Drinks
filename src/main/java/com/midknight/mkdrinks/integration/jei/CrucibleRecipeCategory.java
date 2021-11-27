@@ -1,7 +1,7 @@
 package com.midknight.mkdrinks.integration.jei;
 
 import com.midknight.mkdrinks.MKDrinks;
-import com.midknight.mkdrinks.block.MKBlocks;
+import com.midknight.mkdrinks.block.DrinkBlocks;
 import com.midknight.mkdrinks.data.recipes.CrucibleRecipe;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
@@ -24,7 +24,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
 
     public CrucibleRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 5, 5, 166, 75);
-        this.icon = helper.createDrawableIngredient(new ItemStack(MKBlocks.CRUCIBLE.get()));
+        this.icon = helper.createDrawableIngredient(new ItemStack(DrinkBlocks.CRUCIBLE.get()));
         this.heat = helper.createDrawable(TEXTURE, 176, 13, 16, 17);
     }
     @Override
@@ -39,7 +39,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
 
     @Override
     public String getTitle() {
-        return MKBlocks.CRUCIBLE.get().getTranslatedName().getString();
+        return DrinkBlocks.CRUCIBLE.get().getTranslatedName().getString();
     }
 
     @Override

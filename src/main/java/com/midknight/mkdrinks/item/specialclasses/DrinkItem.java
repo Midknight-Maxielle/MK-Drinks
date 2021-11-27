@@ -1,6 +1,6 @@
 package com.midknight.mkdrinks.item.specialclasses;
 
-import com.midknight.mkdrinks.item.MKMiscItems;
+import com.midknight.mkdrinks.item.DrinkItems;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -35,10 +35,10 @@ public class DrinkItem extends Item {
         super.onItemUseFinish(stack, worldIn, entityLiving);
 
         if (stack.isEmpty()) {
-            return new ItemStack(MKMiscItems.DRINK_BOTTLE.get());
+            return new ItemStack(DrinkItems.DRINK_BOTTLE.get());
         } else {
             if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.isCreativeMode) {
-                ItemStack itemstack = new ItemStack(MKMiscItems.DRINK_BOTTLE.get());
+                ItemStack itemstack = new ItemStack(DrinkItems.DRINK_BOTTLE.get());
                 PlayerEntity playerentity = (PlayerEntity)entityLiving;
                 if (!playerentity.inventory.addItemStackToInventory(itemstack)) {
                     playerentity.dropItem(itemstack, false);

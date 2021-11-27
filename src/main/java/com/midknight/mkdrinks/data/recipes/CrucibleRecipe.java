@@ -3,14 +3,12 @@ package com.midknight.mkdrinks.data.recipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.midknight.mkdrinks.MKDrinks;
-import com.midknight.mkdrinks.block.MKBlocks;
+import com.midknight.mkdrinks.block.DrinkBlocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapedRecipe;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.NonNullList;
@@ -57,7 +55,7 @@ public class CrucibleRecipe implements ICrucibleRecipe{
     }
 
     @Override
-    public ItemStack getIcon() { return new ItemStack(MKBlocks.CRUCIBLE.get()); }
+    public ItemStack getIcon() { return new ItemStack(DrinkBlocks.CRUCIBLE.get()); }
 
     @Override
     public ResourceLocation getId() {

@@ -1,8 +1,8 @@
 package com.midknight.mkdrinks.block;
 
 import com.midknight.mkdrinks.MKDrinks;
-import com.midknight.mkdrinks.item.MKCreativeTab;
-import com.midknight.mkdrinks.item.MKItemsRegistry;
+import com.midknight.mkdrinks.item.DrinkItems;
+import com.midknight.mkdrinks.item.DrinkTab;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
@@ -16,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
-public class MKBlocks {
+public class DrinkBlocks {
 
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, MKDrinks.MOD_ID);
@@ -30,15 +30,16 @@ public class MKBlocks {
                     .sound(SoundType.GLASS)
                     .hardnessAndResistance(1.0F)
                     .notSolid()
-                    .setOpaque(MKBlocks::isntSolid)
-                    .setBlocksVision(MKBlocks::isntSolid)
+                    .setOpaque(DrinkBlocks::isntSolid)
+                    .setBlocksVision(DrinkBlocks::isntSolid)
             ));
 
     public static final RegistryObject<Block> BOTTLE_GLASS_PANE = registerBlock("bottle_glass_pane",
             () -> new PaneBlock(AbstractBlock.Properties.create(Material.GLASS)
                     .sound(SoundType.GLASS)
                     .hardnessAndResistance(1.0F)
-                    .notSolid()));
+                    .notSolid()
+            ));
 
     // - - - - -  Tile Entity Blocks - - - - - //
     // - - - - - - - - - - - - - - - - - - - - //
@@ -59,11 +60,9 @@ public class MKBlocks {
     }
 
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
-        MKItemsRegistry.ITEMS.register(name, () -> new BlockItem(block.get(),
-                new Item.Properties().group(MKCreativeTab.MKDRINKS)));
+        DrinkItems.ITEMS.register(name, () -> new BlockItem(block.get(),
+                new Item.Properties().group(DrinkTab.MKDRINKS)));
     }
-
-    public static void register(IEventBus eventBus) { BLOCKS.register(eventBus); }
 
     private static boolean isntSolid(BlockState state, IBlockReader reader, BlockPos pos) {
         return false;

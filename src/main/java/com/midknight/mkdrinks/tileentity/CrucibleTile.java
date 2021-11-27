@@ -2,7 +2,6 @@ package com.midknight.mkdrinks.tileentity;
 
 import com.midknight.mkdrinks.block.CrucibleBlock;
 import com.midknight.mkdrinks.data.recipes.CrucibleRecipe;
-import com.midknight.mkdrinks.data.recipes.DrinksRecipes;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -26,14 +25,18 @@ import java.util.Optional;
 
 public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHeatableTile {
 
+    // Fields
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
-    protected final IIntArray crucibleData;
     protected final IRecipeType<CrucibleRecipe> recipeType;
+    protected final IIntArray crucibleData;
+    protected boolean processActive;
+    protected int processElapsed;
+    protected int processTotal;
 
-    // // // // CONSTRUCTOR // // // //
 
+    // Constructors
     public CrucibleTile(TileEntityType<?> tileEntity, IRecipeType<CrucibleRecipe> recipeType) {
         super(tileEntity);
         this.recipeType = recipeType;
@@ -41,11 +44,10 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
     }
 
     public CrucibleTile() {
-    this(MKTileEntities.CRUCIBLE_TILE.get(), CrucibleRecipe.TYPE);
+        this(DrinkTiles.CRUCIBLE_TILE.get(), CrucibleRecipe.TYPE);
     }
 
-    // // // // NBT PKT MANAGEMENT // // // //
-
+    //NBT Methods
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
         super.read(state, nbt);
@@ -64,35 +66,31 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
         return nbt;
     }
 
-    // // // // CAPABILITY & HANDLING // // // //
-
+    // Capability & Handling Method
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return handler.cast();
         }
-
         return super.getCapability(cap, side);
     }
 
-    // // // // DATA ARRAY MANAGEMENT // // // //
+    // Data Array Management Method
+    public IIntArray getCrucibleData() {
+        return crucibleData;
+    }
 
-    public IIntArray getCrucibleData() { return crucibleData; }
-
-    // // // // TICKING FUNCTIONALITY // // // //
+    // Tick Method
     @Override
     public void tick() {
-
         if(world != null && !world.isRemote()) {
-
             Inventory inv = new Inventory(itemHandler.getSlots());
+
             for(int i = 0; i < itemHandler.getSlots(); i++) {
                 inv.setInventorySlotContents(i, itemHandler.getStackInSlot(i));
             }
-
             if (hasInput() && isHeated()) {
-
                 Optional<CrucibleRecipe> recipe = Optional.ofNullable(this.world.getRecipeManager().getRecipe(
                         this.recipeType,
                         new RecipeWrapper(itemHandler),
@@ -108,49 +106,34 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
                 processActive = false;
                 this.world.setBlockState(this.getPos(),this.getBlockState().with(CrucibleBlock.LIT, false));
             }
-
         } else {
             return;
         }
     }
 
-    // - - - - - // Machine Processes // - - - - - //
-
-    protected boolean processActive;
-
-    protected int processElapsed;
-    protected int processTotal;
+    // Processing Methods
 
     private void crucibleProcess(ItemStack result, boolean heated) {
-
         processTotal = 200;
 
         if(heated && processActive) {
             if(processElapsed == processTotal) {
-
                 itemHandler.extractItem(0,1,false);
                 itemHandler.insertItem(1,result,false);
-
                 processElapsed = 0;
                 processActive = false;
-
                 this.world.setBlockState(this.getPos(),this.getBlockState().with(CrucibleBlock.LIT, false));
-
             } else {
-
                 this.world.setBlockState(this.getPos(),this.getBlockState().with(CrucibleBlock.LIT, true));
-
                 ++processElapsed;
             }
         } else {
             processElapsed = 0;
             processActive = false;
-
         }
     }
 
-    // - - - - - // I/O Management // - - - - - //
-
+    // I/O Methods
     private boolean hasInput() {
         if(!(itemHandler.getStackInSlot(0).isEmpty())) {
             return true;
@@ -158,18 +141,16 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
         return false;
     }
 
-    // - - - - - // Heat Management // - - - - - //
-
+    // Heat Method
     public boolean isHeated() {
         if(world == null) {
             return false;
         } else {
             return this.isHeated(world, pos);
         }
-    };
+    }
 
-    // - - - - - // IIntArray Creation // - - - - - //
-
+    // Data Management Array Init Method
     private IIntArray createIntArray() {
         return new IIntArray() {
             @Override
@@ -194,7 +175,6 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
                         CrucibleTile.this.processTotal = value;
                         break;
                 }
-
             }
 
             @Override
@@ -204,8 +184,7 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
         };
     }
 
-    // - - - - - // create Methods // - - - - - //
-
+    // ItemHandler init Method
     private ItemStackHandler createHandler() {
         return new ItemStackHandler(2) {
 
@@ -229,5 +208,4 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
             }
         };
     }
-
 }

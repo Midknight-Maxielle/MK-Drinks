@@ -1,21 +1,17 @@
 package com.midknight.mkdrinks.container;
 
-import com.midknight.mkdrinks.block.MKBlocks;
+import com.midknight.mkdrinks.block.DrinkBlocks;
 import com.midknight.mkdrinks.tileentity.CrucibleTile;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIntArray;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntArray;
 import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -38,7 +34,7 @@ public class CrucibleContainer extends Container {
                              IIntArray crucibleDataIn,
                              CrucibleTile tileEntity)
     {
-        super(MKContainers.CRUCIBLE_CONTAINER.get(), windowId);
+        super(DrinkContainers.CRUCIBLE_CONTAINER.get(), windowId);
         this.tileEntity = tileEntity;
         playerEntity = player;
         this.crucibleData = crucibleDataIn;
@@ -88,7 +84,7 @@ public class CrucibleContainer extends Container {
     @Override
     public boolean canInteractWith(PlayerEntity player) {
         return isWithinUsableDistance(IWorldPosCallable.of(tileEntity.getWorld(), tileEntity.getPos()
-        ), player, MKBlocks.CRUCIBLE.get());
+        ), player, DrinkBlocks.CRUCIBLE.get());
     }
 
     private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {

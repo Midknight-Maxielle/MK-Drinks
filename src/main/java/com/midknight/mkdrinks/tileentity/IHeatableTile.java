@@ -9,9 +9,7 @@ import net.minecraft.world.World;
 public interface IHeatableTile {
 
     default boolean isHeated(World world, BlockPos pos) {
-
         BlockState stateBelow = world.getBlockState(pos.down());
-
         if (BlockTags.CAMPFIRES.contains(stateBelow.getBlock())) {
             if (stateBelow.hasProperty(BlockStateProperties.LIT)) {
                 return stateBelow.get(BlockStateProperties.LIT);

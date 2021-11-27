@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.function.Supplier;
 
-public enum MKArmorMaterial implements IArmorMaterial {
+public enum DrinkArmourMat implements IArmorMaterial {
 
     DRINKMETAL(
             "drinkmetal",
@@ -22,7 +22,7 @@ public enum MKArmorMaterial implements IArmorMaterial {
             SoundEvents.ITEM_ARMOR_EQUIP_IRON,
             1.0F,
             0.0F,
-            () -> {return Ingredient.fromItems(MKMiscItems.DRINKMETAL_INGOT.get());}
+            () -> {return Ingredient.fromItems(DrinkItems.DRINKMETAL_INGOT.get());}
     );
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
@@ -35,7 +35,7 @@ public enum MKArmorMaterial implements IArmorMaterial {
     private final float knockbackResistance;
     private final LazyValue<Ingredient> repairMaterial;
 
-    private MKArmorMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial) {
+    private DrinkArmourMat(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial) {
         this.name = name;
         this.maxDamageFactor = maxDamageFactor;
         this.damageReductionAmountArray = damageReductionAmountArray;

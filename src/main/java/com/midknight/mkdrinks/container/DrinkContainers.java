@@ -11,7 +11,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class MKContainers {
+public class DrinkContainers {
 
     public static DeferredRegister<ContainerType<?>> CONTAINERS =
             DeferredRegister.create(ForgeRegistries.CONTAINERS, MKDrinks.MOD_ID);
@@ -36,7 +36,4 @@ public class MKContainers {
 
             ));
 
-    public static void register(IEventBus eventBus) {
-        CONTAINERS.register(eventBus);
-    }
 }

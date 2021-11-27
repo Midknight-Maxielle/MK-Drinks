@@ -10,7 +10,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class DrinksRecipes {
+public class DrinkRecipes {
 
     public static final DeferredRegister<IRecipeSerializer<?>> RECIPES =
         DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MKDrinks.MOD_ID);

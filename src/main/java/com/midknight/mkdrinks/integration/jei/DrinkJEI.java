@@ -2,7 +2,7 @@ package com.midknight.mkdrinks.integration.jei;
 
 import com.midknight.mkdrinks.MKDrinks;
 import com.midknight.mkdrinks.data.recipes.CrucibleRecipe;
-import com.midknight.mkdrinks.data.recipes.DrinksRecipes;
+import com.midknight.mkdrinks.data.recipes.DrinkRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -15,11 +15,10 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @JeiPlugin
-public class MKDrinksJei implements IModPlugin {
+public class DrinkJEI implements IModPlugin {
 
     protected static IJeiRuntime runtime;
 
@@ -46,11 +45,11 @@ public class MKDrinksJei implements IModPlugin {
         List<IRecipe<?>> crucibleRecipes = recipeManager.getRecipes().stream()
             .filter(r -> r.getType() == CrucibleRecipe.TYPE).collect(Collectors.toList());
 
-        registration.addRecipes(crucibleRecipes, DrinksRecipes.CRUCIBLE_RECIPE.getId());
+        registration.addRecipes(crucibleRecipes, DrinkRecipes.CRUCIBLE_RECIPE.getId());
     }
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        MKDrinksJei.runtime = jeiRuntime;
+        DrinkJEI.runtime = jeiRuntime;
     }
 }

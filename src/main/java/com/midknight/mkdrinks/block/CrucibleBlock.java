@@ -3,8 +3,7 @@ package com.midknight.mkdrinks.block;
 import com.midknight.mkdrinks.block.state.CrucibleLift;
 import com.midknight.mkdrinks.container.CrucibleContainer;
 import com.midknight.mkdrinks.tileentity.CrucibleTile;
-import com.midknight.mkdrinks.tileentity.MKTileEntities;
-import com.midknight.mkdrinks.util.ModTags;
+import com.midknight.mkdrinks.tileentity.DrinkTiles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
@@ -17,12 +16,10 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -36,13 +33,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class CrucibleBlock extends HorizontalBlock {
 
@@ -130,7 +124,7 @@ public class CrucibleBlock extends HorizontalBlock {
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return MKTileEntities.CRUCIBLE_TILE.get().create();
+        return DrinkTiles.CRUCIBLE_TILE.get().create();
     }
 
     @Override
