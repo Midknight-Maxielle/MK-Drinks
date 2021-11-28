@@ -1,0 +1,5 @@
+{
+  "type": "juicebar:crucible",
+  "ingredients": [{"item": "juicebar:drinkmetal_blend"}],
+  "output": {"item": "juicebar:drinkmetal_ingot"}
+}

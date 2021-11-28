@@ -1,5 +1,0 @@
-{
-  "type": "mkdrinks:crucible",
-  "ingredients": [{"item": "mkdrinks:drinkmetal_blend"}],
-  "output": {"item": "mkdrinks:drinkmetal_ingot"}
-}

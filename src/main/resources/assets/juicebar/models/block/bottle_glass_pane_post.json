@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_glass_pane_post",
+  "textures": {
+    "pane": "juicebar:block/bottle_glass",
+    "edge": "juicebar:block/bottle_glass_pane_top"
+  }
+}

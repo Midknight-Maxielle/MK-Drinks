@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "juicebar:juice_apple",
+    "juicebar:juice_bamboo",
+    "juicebar:juice_beetroot",
+    "juicebar:juice_berry",
+    "juicebar:juice_cactus",
+    "juicebar:juice_carrot",
+    "juicebar:juice_cocoa",
+    "juicebar:juice_egg",
+    "juicebar:juice_kelp",
+    "juicebar:juice_melon",
+    "juicebar:juice_mushroom",
+    "juicebar:juice_pickle",
+    "juicebar:juice_potato",
+    "juicebar:juice_pumpkin",
+    "juicebar:juice_sapling",
+    "juicebar:juice_sugar",
+    "juicebar:juice_wheat"
+  ]
+}

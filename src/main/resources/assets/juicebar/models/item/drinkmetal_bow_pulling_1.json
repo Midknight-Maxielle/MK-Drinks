@@ -1,0 +1,6 @@
+{
+  "parent": "juicebar:item/drinkmetal_bow",
+  "textures": {
+    "layer0": "juicebar:item/drinkmetal_bow_pulling_1"
+  }
+}

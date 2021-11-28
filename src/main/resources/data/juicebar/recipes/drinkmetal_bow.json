@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " GS",
+    "G S",
+    " GS"
+  ],
+  "key": {
+    "G": {"item": "juicebar:drinkmetal_ingot"},
+    "S": {"item":"minecraft:string"}
+    },
+  "result": {
+    "item": "juicebar:drinkmetal_bow",
+    "count": 1
+  }
+}

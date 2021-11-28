@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "juicebar:juice_bar"
+    }
+  ],
+  "result": {
+    "item": "juicebar:metallized_blend",
+    "count": 2
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":[
+    " I ",
+    " S ",
+    " B "
+  ],
+  "key": {
+    "I": { "item": "minecraft:kelp" },
+    "S": { "item": "minecraft:sugar" },
+    "B": { "item": "juicebar:juice_bottle" }
+  },
+  "result": {
+    "item": "juicebar:juice_kelp",
+    "count": 1
+  }
+}

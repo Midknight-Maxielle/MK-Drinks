@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":[
+    " I ",
+    " S ",
+    " B "
+  ],
+  "key": {
+    "I": { "item": "minecraft:sea_pickle" },
+    "S": { "item": "minecraft:sugar" },
+    "B": { "item": "juicebar:juice_bottle" }
+  },
+  "result": {
+    "item": "juicebar:juice_pickle",
+    "count": 1
+  }
+}

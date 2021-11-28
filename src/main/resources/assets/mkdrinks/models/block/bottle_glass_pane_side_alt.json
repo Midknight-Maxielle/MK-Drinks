@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/template_glass_pane_side_alt",
-  "textures": {
-    "pane": "mkdrinks:block/bottle_glass",
-    "edge": "mkdrinks:block/bottle_glass_pane_top"
-  }
-}

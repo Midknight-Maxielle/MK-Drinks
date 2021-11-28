@@ -1,0 +1,45 @@
+{
+
+  "block.juicebar.crucible_block": "Crucible",
+  "screen.juicebar.crucible": "Crucible",
+
+  "block.juicebar.bottle_glass": "Bottle Glass",
+  "block.juicebar.bottle_glass_pane": "Bottle Glass Pane",
+
+  "item.juicebar.juice_bottle": "Juice Bottle",
+
+  "item.juicebar.metallized_blend": "Metallized Blend",
+  "item.juicebar.drinkmetal_blend": "Drinkmetal Blend",
+  "item.juicebar.drinkmetal_ingot": "Drinkmetal Ingot",
+
+  "item.juicebar.juice_apple": "Apple Juice",
+  "item.juicebar.juice_bamboo": "Bamboo Juice",
+  "item.juicebar.juice_beetroot": "Beetroot Juice",
+  "item.juicebar.juice_berry": "Berry Juice",
+  "item.juicebar.juice_cactus": "Cactus Juice",
+  "item.juicebar.juice_carrot": "Carrot Juice",
+  "item.juicebar.juice_cocoa": "Cocoa Juice",
+  "item.juicebar.juice_egg": "Egg Juice",
+  "item.juicebar.juice_kelp": "Kelp Juice",
+  "item.juicebar.juice_melon": "Melon Juice",
+  "item.juicebar.juice_mushroom": "Mushroom Juice",
+  "item.juicebar.juice_pickle": "Pickle Juice",
+  "item.juicebar.juice_potato": "Potato Juice",
+  "item.juicebar.juice_pumpkin": "Pumpkin Juice",
+  "item.juicebar.juice_sapling": "Tree Juice",
+  "item.juicebar.juice_sugar": "Sugar Juice",
+  "item.juicebar.juice_wheat": "Wheat Juice",
+
+  "effect.juicebar.spiny_effect": "Spiny",
+
+  "item.juicebar.drinkmetal_bow": "Drinkmetal Bow",
+  "item.juicebar.drinkmetal_boots": "Drinkmetal Boots",
+  "item.juicebar.drinkmetal_chestplate": "Drinkmetal Chestplate",
+  "item.juicebar.drinkmetal_leggings": "Drinkmetal Leggings",
+  "item.juicebar.drinkmetal_helmet": "Drinkmetal Helmet",
+
+  "itemGroup.juicebarCreativeTab": "MK's Juicebar",
+
+  "tooltip.juicebar.crucible":"Hold \u00A7eSHIFT\u00A7r for more information.",
+  "tooltip.juicebar.crucible_shift": "Must be placed above a campfire or similar heat source to function."
+}
