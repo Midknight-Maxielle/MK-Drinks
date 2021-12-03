@@ -3,11 +3,11 @@ package com.midknight.juicebar.registry;
 import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.util.JuiceArmourMaterial;
 import com.midknight.juicebar.util.JuiceTab;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.Item;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -29,7 +29,7 @@ public class JuiceEquipment {
     public static final RegistryObject<Item> DRINKMETAL_BOOTS = ITEMS.register("drinkmetal_boots",
             () -> new ArmorItem(
                     JuiceArmourMaterial.DRINKMETAL,
-                    EquipmentSlotType.FEET,
+                    EquipmentSlot.FEET,
                     new Item.Properties()
                             .tab(JuiceTab.JUICEBAR)
                             .stacksTo(1)
@@ -38,7 +38,7 @@ public class JuiceEquipment {
     public static final RegistryObject<Item> DRINKMETAL_CHEST = ITEMS.register("drinkmetal_chestplate",
             () -> new ArmorItem(
                     JuiceArmourMaterial.DRINKMETAL,
-                    EquipmentSlotType.CHEST,
+                    EquipmentSlot.CHEST,
                     new Item.Properties()
                             .tab(JuiceTab.JUICEBAR)
                             .stacksTo(1)
@@ -47,7 +47,7 @@ public class JuiceEquipment {
     public static final RegistryObject<Item> DRINKMETAL_LEGGINGS = ITEMS.register("drinkmetal_leggings",
             () -> new ArmorItem(
                     JuiceArmourMaterial.DRINKMETAL,
-                    EquipmentSlotType.LEGS,
+                    EquipmentSlot.LEGS,
                     new Item.Properties()
                             .tab(JuiceTab.JUICEBAR)
                             .stacksTo(1)
@@ -56,7 +56,7 @@ public class JuiceEquipment {
     public static final RegistryObject<Item> DRINKMETAL_HELMET = ITEMS.register("drinkmetal_helmet",
             () -> new ArmorItem(
                     JuiceArmourMaterial.DRINKMETAL,
-                    EquipmentSlotType.HEAD,
+                    EquipmentSlot.HEAD,
                     new Item.Properties()
                             .tab(JuiceTab.JUICEBAR)
                             .stacksTo(1)

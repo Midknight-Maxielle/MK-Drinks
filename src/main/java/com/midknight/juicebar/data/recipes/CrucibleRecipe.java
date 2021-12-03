@@ -4,21 +4,20 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.midknight.juicebar.registry.JuiceBlocks;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -40,14 +39,14 @@ public class CrucibleRecipe implements ICrucibleRecipe{
     }
 
     @Override
-    public boolean matches(IInventory inv, World worldIn) {
+    public boolean matches(Container inv, Level worldIn) {
         return recipeItems.get(0).test(inv.getItem(0));
     }
 
     public NonNullList<Ingredient> getIngredients() { return recipeItems; }
 
     @Override
-    public ItemStack assemble(IInventory inv) {
+    public ItemStack assemble(Container inv) {
         return output;
     }
 
@@ -65,27 +64,27 @@ public class CrucibleRecipe implements ICrucibleRecipe{
     }
 
     @Override
-    public IRecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<?> getSerializer() {
         return SERIALIZER;
     }
 
-    public static class CrucibleRecipeType implements IRecipeType<CrucibleRecipe> {
+    public static class CrucibleRecipeType implements RecipeType<CrucibleRecipe> {
         @Override
         public String toString() { return CrucibleRecipe.TYPE_ID.toString(); }
     }
 
-    public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CrucibleRecipe> {
+    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CrucibleRecipe> {
 
         @Override
         public CrucibleRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            final NonNullList<Ingredient> inputItem = readInput(JSONUtils.getAsJsonArray(json, "ingredients"));
+            final NonNullList<Ingredient> inputItem = readInput(GsonHelper.getAsJsonArray(json, "ingredients"));
             if (inputItem.isEmpty()) {
                 throw new JsonParseException("Input item missing for crucible recipe.");
             } else if (inputItem.size() > 1) {
                 throw new JsonParseException("Too many input items for crucible recipe. Only 1 is required.");
             } else {
-                final ItemStack outputItem = CraftingHelper.getItemStack(JSONUtils.getAsJsonObject(json, "output"), true);
+                final ItemStack outputItem = CraftingHelper.getItemStack(GsonHelper.getAsJsonObject(json, "output"), true);
                 return new CrucibleRecipe(recipeId, outputItem, inputItem);
             }
         }
@@ -104,7 +103,7 @@ public class CrucibleRecipe implements ICrucibleRecipe{
 
         @Nullable
         @Override
-        public CrucibleRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CrucibleRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 
             int i = buffer.readVarInt();
             NonNullList<Ingredient> inputItem = NonNullList.withSize(i, Ingredient.EMPTY);
@@ -118,7 +117,7 @@ public class CrucibleRecipe implements ICrucibleRecipe{
         }
 
         @Override
-        public void toNetwork(PacketBuffer buffer, CrucibleRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, CrucibleRecipe recipe) {
 
             buffer.writeVarInt(recipe.getIngredients().size());
 

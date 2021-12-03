@@ -1,10 +1,9 @@
 package com.midknight.juicebar.block.state;
-
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
 import javax.annotation.Nonnull;
 
-public enum CrucibleLift implements IStringSerializable {
+public enum CrucibleLift implements StringRepresentable {
 
     NONE("none"),
     LIFTED("lifted")

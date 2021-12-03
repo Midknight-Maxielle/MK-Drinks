@@ -12,9 +12,9 @@ import com.midknight.juicebar.registry.JuiceTiles;
 import com.midknight.juicebar.util.JuiceEventHandler;
 import com.midknight.juicebar.util.JuiceItemModelProperties;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -44,7 +44,7 @@ public class Juicebar {
         JuiceEquipment.ITEMS.register(eventBus);
         JuiceBlocks.BLOCKS.register(eventBus);
         JuiceContainers.CONTAINERS.register(eventBus);
-        JuiceTiles.TILES.register(eventBus);
+        JuiceTiles.BLOCK_ENTITIES.register(eventBus);
         JuiceRecipes.RECIPES.register(eventBus);
         JuiceEffects.EFFECTS.register(eventBus);
 
@@ -59,10 +59,10 @@ public class Juicebar {
     private void ClientSetup (final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
 
-            ScreenManager.register(JuiceContainers.CRUCIBLE_CONTAINER.get(), CrucibleScreen::new);
-            RenderTypeLookup.setRenderLayer(JuiceBlocks.CRUCIBLE.get(), RenderType.cutout());
-            RenderTypeLookup.setRenderLayer(JuiceBlocks.BOTTLE_GLASS.get(), RenderType.cutout());
-            RenderTypeLookup.setRenderLayer(JuiceBlocks.BOTTLE_GLASS_PANE.get(), RenderType.cutout());
+            MenuScreens.register(JuiceContainers.CRUCIBLE_CONTAINER.get(), CrucibleScreen::new);
+            ItemBlockRenderTypes.setRenderLayer(JuiceBlocks.CRUCIBLE.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JuiceBlocks.BOTTLE_GLASS.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(JuiceBlocks.BOTTLE_GLASS_PANE.get(), RenderType.cutout());
             JuiceItemModelProperties.makeBow(JuiceEquipment.DRINKMETAL_BOW.get());
         });
     }

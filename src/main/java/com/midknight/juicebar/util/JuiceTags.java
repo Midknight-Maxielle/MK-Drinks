@@ -2,14 +2,15 @@ package com.midknight.juicebar.util;
 
 import com.midknight.juicebar.Juicebar;
 
-import net.minecraft.block.Block;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -29,8 +30,8 @@ public class JuiceTags {
         }
 
         protected void registerHeatSources() {
-            tag(JuiceTags.Blocks.HEAT_SOURCES).add(
-                     net.minecraft.block.Blocks.LAVA)
+            tag(JuiceTags.Blocks.HEAT_SOURCES)
+                    .add(net.minecraft.world.level.block.Blocks.LAVA)
                     .addTag(net.minecraft.tags.BlockTags.CAMPFIRES)
                     .addTag(net.minecraft.tags.BlockTags.FIRE);
         }

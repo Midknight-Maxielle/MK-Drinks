@@ -3,16 +3,12 @@ package com.midknight.juicebar.container;
 import com.midknight.juicebar.registry.JuiceBlocks;
 import com.midknight.juicebar.registry.JuiceContainers;
 import com.midknight.juicebar.tileentity.CrucibleTile;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.IntReferenceHolder;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -21,21 +17,21 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class CrucibleContainer extends Container {
+public class CrucibleContainer extends AbstractContainerMenu {
 
     // - - - - - // Variable Declaration // - - - - - //
 
     public final CrucibleTile tileEntity;
-    private final PlayerEntity playerEntity;
+    private final Player playerEntity;
     private final IItemHandler playerInventory;
-    protected final IIntArray crucibleData;
+    protected final ContainerData crucibleData;
 
     public CrucibleContainer(int windowId,
-                             World world,
+                             Level world,
                              BlockPos pos,
-                             PlayerInventory playerInventory,
-                             PlayerEntity player,
-                             IIntArray crucibleDataIn,
+                             Inventory playerInventory,
+                             Player player,
+                             ContainerData crucibleDataIn,
                              CrucibleTile tileEntity)
     {
         super(JuiceContainers.CRUCIBLE_CONTAINER.get(), windowId);
@@ -45,7 +41,7 @@ public class CrucibleContainer extends Container {
         this.playerInventory = new InvWrapper(playerInventory);
 
         this.addDataSlots(crucibleData);
-        this.addDataSlot(new IntReferenceHolder() {
+        this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return tileEntity.getCrucibleData().get(1);
@@ -60,7 +56,7 @@ public class CrucibleContainer extends Container {
 
         layoutPlayerInventorySlots(8, 86);
 
-        this.addDataSlot(new IntReferenceHolder() {
+        this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return smeltProgress();
@@ -86,9 +82,9 @@ public class CrucibleContainer extends Container {
 
 
     @Override @ParametersAreNonnullByDefault
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         if(tileEntity.getLevel() != null) {
-            return stillValid(IWorldPosCallable.create(tileEntity.getLevel(), tileEntity.getBlockPos()
+            return stillValid(ContainerLevelAccess.create(tileEntity.getLevel(), tileEntity.getBlockPos()
             ), player, JuiceBlocks.CRUCIBLE.get());
         } else {
             return false;
@@ -149,7 +145,7 @@ public class CrucibleContainer extends Container {
     private static final int TE_INVENTORY_SLOT_COUNT = 2;  // must match TileEntityInventoryBasic.NUMBER_OF_SLOTS
 
     @Override @Nonnull @ParametersAreNonnullByDefault
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot sourceSlot = slots.get(index);
         if (sourceSlot == null || !sourceSlot.hasItem()) return ItemStack.EMPTY;  //EMPTY_ITEM
         ItemStack sourceStack = sourceSlot.getItem();

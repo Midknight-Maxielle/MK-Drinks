@@ -1,17 +1,21 @@
 package com.midknight.juicebar.screen;
 
 import com.midknight.juicebar.Juicebar;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.midknight.juicebar.container.CrucibleContainer;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.awt.*;
 
-public class CrucibleScreen extends ContainerScreen<CrucibleContainer> {
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+public class CrucibleScreen extends AbstractContainerScreen<CrucibleContainer> {
 
     // Fields
     private static final ResourceLocation GUI = new ResourceLocation(Juicebar.MOD_ID, "textures/gui/crucible_gui.png");
@@ -19,22 +23,21 @@ public class CrucibleScreen extends ContainerScreen<CrucibleContainer> {
     private static final Rectangle HEAT_ICON = new Rectangle(79,62,16,17);
 
     //Constructor Method
-    public CrucibleScreen(CrucibleContainer crucibleContainer, PlayerInventory playerInventory, ITextComponent title) {
+    public CrucibleScreen(CrucibleContainer crucibleContainer, Inventory playerInventory, Component title) {
         super(crucibleContainer, playerInventory, title);
 
     }
 
     @Override
-    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
-        RenderSystem.color4f(1F,1F,1F,1F);
-        this.minecraft.getTextureManager().bind(GUI);
+    protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+        RenderSystem.setShaderTexture(0, GUI);
         int posX = this.leftPos;
         int posY = this.topPos;
         this.blit(matrixStack, posX, posY, 0, 0, this.getXSize(), this.getYSize());

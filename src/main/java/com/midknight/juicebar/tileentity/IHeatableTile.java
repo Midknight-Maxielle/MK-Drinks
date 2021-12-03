@@ -1,14 +1,14 @@
 package com.midknight.juicebar.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public interface IHeatableTile {
 
-    default boolean isHeated(World world, BlockPos pos) {
+    default boolean isHeated(Level world, BlockPos pos) {
         BlockState stateBelow = world.getBlockState(pos.below());
         if (BlockTags.CAMPFIRES.contains(stateBelow.getBlock())) {
             if (stateBelow.hasProperty(BlockStateProperties.LIT)) {

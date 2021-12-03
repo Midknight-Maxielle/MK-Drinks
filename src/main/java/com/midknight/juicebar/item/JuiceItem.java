@@ -1,15 +1,15 @@
 package com.midknight.juicebar.item;
 
 import com.midknight.juicebar.registry.JuiceMiscItems;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -18,13 +18,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class JuiceItem extends Item {
 
     // Constructor //
-    public JuiceItem(Properties pProperties) {
+    public JuiceItem(Item.Properties pProperties) {
         super(pProperties);
     }
 
     // Sets the animation and sound events to use drink FX. //
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.DRINK;
+    public UseAnim getUseAction(ItemStack stack) {
+        return UseAnim.DRINK;
     }
     public SoundEvent getDrinkSound() { return SoundEvents.GENERIC_DRINK; }
     public SoundEvent getEatSound() {
@@ -32,16 +32,16 @@ public class JuiceItem extends Item {
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+    public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
         super.finishUsingItem(stack, worldIn, entityLiving);
 
         if (stack.isEmpty()) {
             return new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
         } else {
-            if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.instabuild) {
+            if (entityLiving instanceof Player && !((Player)entityLiving).getAbilities().instabuild) {
                 ItemStack itemstack = new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
-                PlayerEntity playerentity = (PlayerEntity)entityLiving;
-                if (!playerentity.inventory.add(itemstack)) {
+                Player playerentity = (Player)entityLiving;
+                if (!playerentity.getInventory().add(itemstack)) {
                     playerentity.drop(itemstack, false);
                 }
             }

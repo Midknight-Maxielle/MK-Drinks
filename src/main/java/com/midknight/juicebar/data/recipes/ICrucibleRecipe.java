@@ -1,20 +1,20 @@
 package com.midknight.juicebar.data.recipes;
 
 import com.midknight.juicebar.Juicebar;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import javax.annotation.Nonnull;
 
-public interface ICrucibleRecipe extends IRecipe<IInventory> {
+public interface ICrucibleRecipe extends Recipe<Container> {
 
-    IRecipeType<CrucibleRecipe> TYPE = IRecipeType.register(Juicebar.MOD_ID + ":crucible");
+    RecipeType<CrucibleRecipe> TYPE = RecipeType.register(Juicebar.MOD_ID + ":crucible");
     ResourceLocation TYPE_ID = new ResourceLocation(Juicebar.MOD_ID, "crucible");
 
     @Override @Nonnull
-    default IRecipeType<?> getType() {
+    default RecipeType<?> getType() {
         return CrucibleRecipe.TYPE;
     }
 

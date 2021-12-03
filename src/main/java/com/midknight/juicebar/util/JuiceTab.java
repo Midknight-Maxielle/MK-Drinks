@@ -1,14 +1,14 @@
 package com.midknight.juicebar.util;
 
 import com.midknight.juicebar.registry.JuiceMiscItems;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
 public class JuiceTab {
 
-    public static final ItemGroup JUICEBAR = new ItemGroup("juicebarCreativeTab") {
+    public static final CreativeModeTab JUICEBAR = new CreativeModeTab("juicebarCreativeTab") {
 
         @Override @Nonnull
         public ItemStack makeIcon() {

@@ -3,17 +3,17 @@ package com.midknight.juicebar.tileentity;
 import com.midknight.juicebar.block.CrucibleBlock;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
 import com.midknight.juicebar.registry.JuiceTiles;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IIntArray;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -28,43 +28,45 @@ import java.util.Optional;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHeatableTile {
+public class CrucibleTile extends BlockEntity implements IHeatableTile {
 
     // Fields
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
-    protected final IRecipeType<CrucibleRecipe> recipeType;
-    protected final IIntArray crucibleData;
+    protected RecipeType<CrucibleRecipe> recipeType;
+    protected final ContainerData crucibleData;
     protected boolean processActive;
     protected int processElapsed;
     protected int processTotal;
 
 
     // Constructors
-    public CrucibleTile(TileEntityType<?> tileEntity, IRecipeType<CrucibleRecipe> recipeType) {
-        super(tileEntity);
-        this.recipeType = recipeType;
+
+    public CrucibleTile(BlockPos pos, BlockState state) {
+        super(JuiceTiles.CRUCIBLE_TILE.get(), pos, state);
         this.crucibleData = createIntArray();
     }
 
-    public CrucibleTile() {
-        this(JuiceTiles.CRUCIBLE_TILE.get(), CrucibleRecipe.TYPE);
+    public CrucibleTile(BlockPos pos, BlockState state, RecipeType<CrucibleRecipe> recipeType) {
+        super(JuiceTiles.CRUCIBLE_TILE.get(), pos, state);
+        this.crucibleData = createIntArray();
+        this.recipeType = recipeType;
     }
 
     //NBT Methods
 
+
     @Override
-    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
-        super.deserializeNBT(state, nbt);
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
         processElapsed = nbt.getInt("ProcessElapsed");
         processTotal = nbt.getInt("ProcessTotal");
         itemHandler.deserializeNBT(nbt.getCompound("inv"));
     }
 
     @Override
-
-    public CompoundNBT save(CompoundNBT nbt) {
+    public CompoundTag save(CompoundTag nbt) {
         super.save(nbt);
         nbt.putInt("ProcessElapsed", processElapsed);
         nbt.putInt("ProcessTotal", processTotal);
@@ -84,42 +86,42 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
     }
 
     // Data Array Management Method
-    public IIntArray getCrucibleData() {
+    public ContainerData getCrucibleData() {
         return crucibleData;
     }
 
     // Tick Method
-    @Override
-    public void tick() {
+    public static void tick(Level level, BlockPos pos, BlockState state, CrucibleTile crucibleTile) {
+        ItemStackHandler itemHandler = crucibleTile.itemHandler;
         if(level != null && !level.isClientSide()) {
-            Inventory inv = new Inventory(itemHandler.getSlots());
+            SimpleContainer inv = new SimpleContainer(itemHandler.getSlots());
 
             for(int i = 0; i < itemHandler.getSlots(); i++) {
                 inv.setItem(i, itemHandler.getStackInSlot(i));
             }
             if (hasInput() && isHeated()) {
-                Optional<CrucibleRecipe> recipe = this.level.getRecipeManager().getRecipeFor(
+                Optional<CrucibleRecipe> recipe = level.getRecipeManager().getRecipeFor(
                         this.recipeType,
                         new RecipeWrapper(itemHandler), level);
 
                 recipe.ifPresent(iRecipe -> {
-                    processActive = true;
+                    crucibleTile.processActive = true;
                     ItemStack result = iRecipe.getResultItem();
-                    crucibleProcess(result, this.isHeated(level, worldPosition));
+                    crucibleProcess(result, crucibleTile.isHeated(level, worldPosition));
                 });
             } else {
                 processElapsed = 0;
                 processActive = false;
-                this.level.setBlockAndUpdate(
-                        this.getBlockPos(),
-                        this.getBlockState().setValue(CrucibleBlock.LIT, false));
+                level.setBlockAndUpdate(
+                        crucibleTile.getBlockPos(),
+                        crucibleTile.getBlockState().setValue(CrucibleBlock.LIT, false));
             }
         }
     }
 
     // Processing Methods
 
-    private void crucibleProcess(ItemStack result, boolean heated) {
+    private static void crucibleProcess(ItemStack result, boolean heated) {
         processTotal = 200;
 
         if(this.level != null) {
@@ -142,22 +144,22 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
     }
 
     // I/O Methods
-    private boolean hasInput() {
+    private static boolean hasInput() {
         return !(itemHandler.getStackInSlot(0).isEmpty());
     }
 
     // Heat Method
-    public boolean isHeated() {
+    public static boolean isHeated() {
         if(level == null) {
             return false;
         } else {
-            return this.isHeated(this.level, this.worldPosition);
+            return isHeated(level, worldPosition);
         }
     }
 
     // Data Management Array Init Method
-    private IIntArray createIntArray() {
-        return new IIntArray() {
+    private ContainerData createIntArray() {
+        return new ContainerData() {
             @Override
             public int get(int index) {
                 switch (index) {

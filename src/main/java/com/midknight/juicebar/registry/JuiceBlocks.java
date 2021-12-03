@@ -4,13 +4,17 @@ import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.block.BottleGlassBlock;
 import com.midknight.juicebar.block.CrucibleBlock;
 import com.midknight.juicebar.util.JuiceTab;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -25,7 +29,7 @@ public class JuiceBlocks {
     // - - - - - - - - - - - - - - - - - //
 
     public static final RegistryObject<Block> BOTTLE_GLASS = registerBlock("bottle_glass",
-            () -> new BottleGlassBlock(AbstractBlock
+            () -> new BottleGlassBlock(BlockBehaviour
                     .Properties.of(Material.GLASS)
                     .sound(SoundType.GLASS)
                     .strength(1.0F)
@@ -35,7 +39,7 @@ public class JuiceBlocks {
             ));
 
     public static final RegistryObject<Block> BOTTLE_GLASS_PANE = registerBlock("bottle_glass_pane",
-            () -> new PaneBlock(AbstractBlock.Properties.of(Material.GLASS)
+            () -> new IronBarsBlock(BlockBehaviour.Properties.of(Material.GLASS)
                     .sound(SoundType.GLASS)
                     .strength(1.0F)
                     .noOcclusion()
@@ -44,8 +48,8 @@ public class JuiceBlocks {
     // - - - - -  Tile Entity Blocks - - - - - //
     // - - - - - - - - - - - - - - - - - - - - //
 
-    public static final RegistryObject<Block> CRUCIBLE = registerBlock("crucible_block",
-            () -> new CrucibleBlock(AbstractBlock
+    public static final RegistryObject<CrucibleBlock> CRUCIBLE = registerBlock("crucible_block",
+            () -> new CrucibleBlock(BlockBehaviour
                     .Properties.of(Material.CLAY)
                     .strength(4.0F)));
 
@@ -64,7 +68,7 @@ public class JuiceBlocks {
                 new Item.Properties().tab(JuiceTab.JUICEBAR)));
     }
 
-    private static boolean isntSolid(BlockState state, IBlockReader reader, BlockPos pos) {
+    private static boolean isntSolid(BlockState state, BlockGetter reader, BlockPos pos) {
         return false;
     }
 }
