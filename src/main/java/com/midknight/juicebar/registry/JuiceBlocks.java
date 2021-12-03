@@ -26,19 +26,19 @@ public class JuiceBlocks {
 
     public static final RegistryObject<Block> BOTTLE_GLASS = registerBlock("bottle_glass",
             () -> new BottleGlassBlock(AbstractBlock
-                    .Properties.create(Material.GLASS)
+                    .Properties.of(Material.GLASS)
                     .sound(SoundType.GLASS)
-                    .hardnessAndResistance(1.0F)
-                    .notSolid()
-                    .setOpaque(JuiceBlocks::isntSolid)
-                    .setBlocksVision(JuiceBlocks::isntSolid)
+                    .strength(1.0F)
+                    .noOcclusion()
+                    .isRedstoneConductor(JuiceBlocks::isntSolid)
+                    .isViewBlocking(JuiceBlocks::isntSolid)
             ));
 
     public static final RegistryObject<Block> BOTTLE_GLASS_PANE = registerBlock("bottle_glass_pane",
-            () -> new PaneBlock(AbstractBlock.Properties.create(Material.GLASS)
+            () -> new PaneBlock(AbstractBlock.Properties.of(Material.GLASS)
                     .sound(SoundType.GLASS)
-                    .hardnessAndResistance(1.0F)
-                    .notSolid()
+                    .strength(1.0F)
+                    .noOcclusion()
             ));
 
     // - - - - -  Tile Entity Blocks - - - - - //
@@ -46,8 +46,8 @@ public class JuiceBlocks {
 
     public static final RegistryObject<Block> CRUCIBLE = registerBlock("crucible_block",
             () -> new CrucibleBlock(AbstractBlock
-                    .Properties.create(Material.CLAY)
-                    .hardnessAndResistance(4)));
+                    .Properties.of(Material.CLAY)
+                    .strength(4.0F)));
 
 
     // - - - - -  Register Methods - - - - - //
@@ -61,7 +61,7 @@ public class JuiceBlocks {
 
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
         JuiceMiscItems.ITEMS.register(name, () -> new BlockItem(block.get(),
-                new Item.Properties().group(JuiceTab.JUICEBAR)));
+                new Item.Properties().tab(JuiceTab.JUICEBAR)));
     }
 
     private static boolean isntSolid(BlockState state, IBlockReader reader, BlockPos pos) {

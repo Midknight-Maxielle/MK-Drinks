@@ -9,23 +9,27 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 public class BottleGlassBlock extends GlassBlock {
     public BottleGlassBlock(AbstractBlock.Properties properties) {
         super(properties);
     }
 
-    @Override
+    @Override @ParametersAreNonnullByDefault
     public boolean propagatesSkylightDown(BlockState state, IBlockReader reader, BlockPos pos) {
         return true;
     }
 
-    @Override
-    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader worldIn, BlockPos pos) {
+
+    @Override @ParametersAreNonnullByDefault
+    public float getShadeBrightness(BlockState state, IBlockReader worldIn, BlockPos pos) {
         return 1.0F;
     }
 
-    @Override
-    public VoxelShape getRayTraceShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
+    @Override @Nonnull @ParametersAreNonnullByDefault
+    public VoxelShape getVisualShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
         return VoxelShapes.empty();
     }
 }

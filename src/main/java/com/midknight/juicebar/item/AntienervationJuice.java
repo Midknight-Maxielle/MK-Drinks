@@ -21,28 +21,26 @@ public class AntienervationJuice extends JuiceItem {
     public UseAction getUseAction(ItemStack stack) {
         return UseAction.DRINK;
     }
-    public SoundEvent getDrinkSound() {
-        return SoundEvents.ENTITY_GENERIC_DRINK;
-    }
+    public SoundEvent getDrinkSound() { return SoundEvents.GENERIC_DRINK;}
     public SoundEvent getEatSound() {
-        return SoundEvents.ENTITY_GENERIC_DRINK;
+        return SoundEvents.GENERIC_DRINK;
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        super.onItemUseFinish(stack, worldIn, entityLiving);
-        if (!worldIn.isRemote()) {
-            entityLiving.removePotionEffect(Effects.WEAKNESS);
-            entityLiving.removePotionEffect(Effects.SLOWNESS);
+    public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+        super.finishUsingItem(stack, worldIn, entityLiving);
+        if (!worldIn.isClientSide()) {
+            entityLiving.removeEffect(Effects.WEAKNESS);
+            entityLiving.removeEffect(Effects.MOVEMENT_SLOWDOWN);
         }
         if (stack.isEmpty()) {
             return new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
         } else {
-            if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.isCreativeMode) {
+            if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.instabuild) {
                 ItemStack itemstack = new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
                 PlayerEntity playerentity = (PlayerEntity)entityLiving;
-                if (!playerentity.inventory.addItemStackToInventory(itemstack)) {
-                    playerentity.dropItem(itemstack, false);
+                if (!playerentity.inventory.add(itemstack)) {
+                    playerentity.drop(itemstack, false);
                 }
             }
             return stack;

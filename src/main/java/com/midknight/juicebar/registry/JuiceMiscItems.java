@@ -20,19 +20,19 @@ public class JuiceMiscItems {
     // ============= //
 
     public static final RegistryObject<Item> JUICE_BOTTLE = ITEMS.register("juice_bottle",
-            () -> new Item(new Item.Properties().group(JuiceTab.JUICEBAR)));
+            () -> new Item(new Item.Properties().tab(JuiceTab.JUICEBAR)));
 
     // ============== //
     // Dusts & Ingots //
     // ============== //
 
     public static final RegistryObject<Item> METALLIZED_BLEND = ITEMS.register("metallized_blend",
-            () -> new Item(new Item.Properties().group(JuiceTab.JUICEBAR)));
+            () -> new Item(new Item.Properties().tab(JuiceTab.JUICEBAR)));
 
     public static final RegistryObject<Item> DRINKMETAL_BLEND = ITEMS.register("drinkmetal_blend",
-            () -> new Item(new Item.Properties().group(JuiceTab.JUICEBAR)));
+            () -> new Item(new Item.Properties().tab(JuiceTab.JUICEBAR)));
 
     public static final RegistryObject<Item> DRINKMETAL_INGOT = ITEMS.register("drinkmetal_ingot",
-            () -> new Item(new Item.Properties().group(JuiceTab.JUICEBAR)));
+            () -> new Item(new Item.Properties().tab(JuiceTab.JUICEBAR)));
 
 }

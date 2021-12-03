@@ -11,10 +11,10 @@ public class JuiceEventHandler {
     @SubscribeEvent
     public static void onPlayerHurt(LivingHurtEvent event) {
         LivingEntity player = event.getEntityLiving();
-        LivingEntity attacker = player.getRevengeTarget();
+        LivingEntity attacker = player.getLastHurtByMob();
 
-        if(player.isPotionActive(JuiceEffects.SPINY_EFFECT.get()) && !(attacker == null)) {
-            attacker.attackEntityFrom(DamageSource.CACTUS, 2.0F);
+        if(player.hasEffect(JuiceEffects.SPINY_EFFECT.get()) && !(attacker == null)) {
+            attacker.hurt(DamageSource.CACTUS, 2.0F);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.midknight.juicebar.block.state;
 
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nonnull;
+
 public enum CrucibleLift implements IStringSerializable {
 
     NONE("none"),
@@ -16,11 +18,11 @@ public enum CrucibleLift implements IStringSerializable {
 
     @Override
     public String toString() {
-        return this.getString();
+        return this.getSerializedName();
     }
 
-    @Override
-    public String getString() {
+    @Override @Nonnull
+    public String getSerializedName() {
         return this.isLifted;
     }
 

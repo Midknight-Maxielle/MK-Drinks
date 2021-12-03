@@ -21,12 +21,12 @@ public class JuiceContainers {
                     () -> IForgeContainerType.create((windowId, inv, data) -> {
 
                         BlockPos pos = data.readBlockPos();
-                        CrucibleTile crucibleTile = (CrucibleTile) inv.player.getEntityWorld().getTileEntity(pos);
+                        CrucibleTile crucibleTile = (CrucibleTile) inv.player.getCommandSenderWorld().getBlockEntity(pos);
                         IIntArray dataArray = crucibleTile.getCrucibleData();
 
                         return new CrucibleContainer(
                                 windowId,
-                                inv.player.getEntityWorld(),
+                                inv.player.getCommandSenderWorld(),
                                 pos,
                                 inv,
                                 inv.player,

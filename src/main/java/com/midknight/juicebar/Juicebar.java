@@ -59,10 +59,10 @@ public class Juicebar {
     private void ClientSetup (final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
 
-            ScreenManager.registerFactory(JuiceContainers.CRUCIBLE_CONTAINER.get(), CrucibleScreen::new);
-            RenderTypeLookup.setRenderLayer(JuiceBlocks.CRUCIBLE.get(), RenderType.getCutout());
-            RenderTypeLookup.setRenderLayer(JuiceBlocks.BOTTLE_GLASS.get(), RenderType.getCutout());
-            RenderTypeLookup.setRenderLayer(JuiceBlocks.BOTTLE_GLASS_PANE.get(), RenderType.getCutout());
+            ScreenManager.register(JuiceContainers.CRUCIBLE_CONTAINER.get(), CrucibleScreen::new);
+            RenderTypeLookup.setRenderLayer(JuiceBlocks.CRUCIBLE.get(), RenderType.cutout());
+            RenderTypeLookup.setRenderLayer(JuiceBlocks.BOTTLE_GLASS.get(), RenderType.cutout());
+            RenderTypeLookup.setRenderLayer(JuiceBlocks.BOTTLE_GLASS_PANE.get(), RenderType.cutout());
             JuiceItemModelProperties.makeBow(JuiceEquipment.DRINKMETAL_BOW.get());
         });
     }

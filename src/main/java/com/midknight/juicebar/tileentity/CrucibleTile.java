@@ -3,6 +3,7 @@ package com.midknight.juicebar.tileentity;
 import com.midknight.juicebar.block.CrucibleBlock;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
 import com.midknight.juicebar.registry.JuiceTiles;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -22,8 +23,11 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHeatableTile {
 
     // Fields
@@ -49,17 +53,19 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
     }
 
     //NBT Methods
+
     @Override
-    public void read(BlockState state, CompoundNBT nbt) {
-        super.read(state, nbt);
+    public void deserializeNBT(BlockState state, CompoundNBT nbt) {
+        super.deserializeNBT(state, nbt);
         processElapsed = nbt.getInt("ProcessElapsed");
         processTotal = nbt.getInt("ProcessTotal");
         itemHandler.deserializeNBT(nbt.getCompound("inv"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT nbt) {
-        super.write(nbt);
+
+    public CompoundNBT save(CompoundNBT nbt) {
+        super.save(nbt);
         nbt.putInt("ProcessElapsed", processElapsed);
         nbt.putInt("ProcessTotal", processTotal);
         nbt.put("inv", itemHandler.serializeNBT());
@@ -85,30 +91,29 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
     // Tick Method
     @Override
     public void tick() {
-        if(world != null && !world.isRemote()) {
+        if(level != null && !level.isClientSide()) {
             Inventory inv = new Inventory(itemHandler.getSlots());
 
             for(int i = 0; i < itemHandler.getSlots(); i++) {
-                inv.setInventorySlotContents(i, itemHandler.getStackInSlot(i));
+                inv.setItem(i, itemHandler.getStackInSlot(i));
             }
             if (hasInput() && isHeated()) {
-                Optional<CrucibleRecipe> recipe = Optional.ofNullable(this.world.getRecipeManager().getRecipe(
+                Optional<CrucibleRecipe> recipe = this.level.getRecipeManager().getRecipeFor(
                         this.recipeType,
-                        new RecipeWrapper(itemHandler),
-                        world).orElse(null));
+                        new RecipeWrapper(itemHandler), level);
 
                 recipe.ifPresent(iRecipe -> {
                     processActive = true;
-                    ItemStack result = iRecipe.getRecipeOutput();
-                    crucibleProcess(result, this.isHeated(world, pos));
+                    ItemStack result = iRecipe.getResultItem();
+                    crucibleProcess(result, this.isHeated(level, worldPosition));
                 });
             } else {
                 processElapsed = 0;
                 processActive = false;
-                this.world.setBlockState(this.getPos(),this.getBlockState().with(CrucibleBlock.LIT, false));
+                this.level.setBlockAndUpdate(
+                        this.getBlockPos(),
+                        this.getBlockState().setValue(CrucibleBlock.LIT, false));
             }
-        } else {
-            return;
         }
     }
 
@@ -117,37 +122,36 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
     private void crucibleProcess(ItemStack result, boolean heated) {
         processTotal = 200;
 
-        if(heated && processActive) {
-            if(processElapsed == processTotal) {
-                itemHandler.extractItem(0,1,false);
-                itemHandler.insertItem(1,result,false);
+        if(this.level != null) {
+            if (heated && processActive) {
+                if (processElapsed == processTotal) {
+                    itemHandler.extractItem(0, 1, false);
+                    itemHandler.insertItem(1, result, false);
+                    processElapsed = 0;
+                    processActive = false;
+                    this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(CrucibleBlock.LIT, false));
+                } else {
+                    this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(CrucibleBlock.LIT, true));
+                    ++processElapsed;
+                }
+            } else {
                 processElapsed = 0;
                 processActive = false;
-                this.world.setBlockState(this.getPos(),this.getBlockState().with(CrucibleBlock.LIT, false));
-            } else {
-                this.world.setBlockState(this.getPos(),this.getBlockState().with(CrucibleBlock.LIT, true));
-                ++processElapsed;
             }
-        } else {
-            processElapsed = 0;
-            processActive = false;
         }
     }
 
     // I/O Methods
     private boolean hasInput() {
-        if(!(itemHandler.getStackInSlot(0).isEmpty())) {
-            return true;
-        }
-        return false;
+        return !(itemHandler.getStackInSlot(0).isEmpty());
     }
 
     // Heat Method
     public boolean isHeated() {
-        if(world == null) {
+        if(level == null) {
             return false;
         } else {
-            return this.isHeated(world, pos);
+            return this.isHeated(this.level, this.worldPosition);
         }
     }
 
@@ -179,7 +183,7 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
             }
 
             @Override
-            public int size() {
+            public int getCount() {
                 return 2;
             }
         };
@@ -191,7 +195,7 @@ public class CrucibleTile extends TileEntity implements ITickableTileEntity, IHe
 
             @Override
             protected void onContentsChanged(int slot) {
-                markDirty();
+                setChanged();
             }
 
             @Override

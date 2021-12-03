@@ -24,12 +24,12 @@ public class JuiceTags {
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
             this.registerHeatSources();
         }
 
         protected void registerHeatSources() {
-            getOrCreateBuilder(JuiceTags.Blocks.HEAT_SOURCES).add(
+            tag(JuiceTags.Blocks.HEAT_SOURCES).add(
                      net.minecraft.block.Blocks.LAVA)
                     .addTag(net.minecraft.tags.BlockTags.CAMPFIRES)
                     .addTag(net.minecraft.tags.BlockTags.FIRE);

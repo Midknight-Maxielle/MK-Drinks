@@ -4,6 +4,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 
 public class SpinyEffect extends Effect {
 
@@ -11,12 +13,11 @@ public class SpinyEffect extends Effect {
         super(typeIn, liquidColorIn);
     }
 
-    public void performEffect(LivingEntity entity, int amplifier) {
-
-    }
+    @ParametersAreNonnullByDefault
+    public void applyEffectTick(LivingEntity entity, int amplifier) {}
 
     @Override
-    public boolean isReady(int duration, int amplifier) {
+    public boolean isDurationEffectTick(int duration, int amplifier) {
        return true;
     }
 }

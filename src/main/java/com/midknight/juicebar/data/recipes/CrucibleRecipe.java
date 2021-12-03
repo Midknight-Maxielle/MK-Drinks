@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.midknight.juicebar.registry.JuiceBlocks;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -17,8 +18,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CrucibleRecipe implements ICrucibleRecipe{
 
     private final ResourceLocation id;
@@ -36,26 +41,23 @@ public class CrucibleRecipe implements ICrucibleRecipe{
 
     @Override
     public boolean matches(IInventory inv, World worldIn) {
-        if(recipeItems.get(0).test(inv.getStackInSlot(0))) {
-            return true;
-        }
-        return false;
+        return recipeItems.get(0).test(inv.getItem(0));
     }
 
     public NonNullList<Ingredient> getIngredients() { return recipeItems; }
 
     @Override
-    public ItemStack getCraftingResult(IInventory inv) {
+    public ItemStack assemble(IInventory inv) {
         return output;
     }
 
     @Override
-    public ItemStack getRecipeOutput() {
+    public ItemStack getResultItem() {
         return output.copy();
     }
 
     @Override
-    public ItemStack getIcon() { return new ItemStack(JuiceBlocks.CRUCIBLE.get()); }
+    public ItemStack getToastSymbol() { return new ItemStack(JuiceBlocks.CRUCIBLE.get()); }
 
     @Override
     public ResourceLocation getId() {
@@ -75,15 +77,15 @@ public class CrucibleRecipe implements ICrucibleRecipe{
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<CrucibleRecipe> {
 
         @Override
-        public CrucibleRecipe read(ResourceLocation recipeId, JsonObject json) {
+        public CrucibleRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 
-            final NonNullList<Ingredient> inputItem = readInput(JSONUtils.getJsonArray(json, "ingredients"));
+            final NonNullList<Ingredient> inputItem = readInput(JSONUtils.getAsJsonArray(json, "ingredients"));
             if (inputItem.isEmpty()) {
                 throw new JsonParseException("Input item missing for crucible recipe.");
             } else if (inputItem.size() > 1) {
                 throw new JsonParseException("Too many input items for crucible recipe. Only 1 is required.");
             } else {
-                final ItemStack outputItem = CraftingHelper.getItemStack(JSONUtils.getJsonObject(json, "output"), true);
+                final ItemStack outputItem = CraftingHelper.getItemStack(JSONUtils.getAsJsonObject(json, "output"), true);
                 return new CrucibleRecipe(recipeId, outputItem, inputItem);
             }
         }
@@ -92,8 +94,8 @@ public class CrucibleRecipe implements ICrucibleRecipe{
             NonNullList<Ingredient> NNL = NonNullList.create();
 
             for (int i = 0; i < inputArray.size(); i++) {
-                Ingredient input = Ingredient.deserialize(inputArray.get(i));
-                if (!input.hasNoMatchingItems()) {
+                Ingredient input = Ingredient.fromJson(inputArray.get(i));
+                if (!input.isEmpty()) {
                     NNL.add(input);
                 }
             }
@@ -102,29 +104,29 @@ public class CrucibleRecipe implements ICrucibleRecipe{
 
         @Nullable
         @Override
-        public CrucibleRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        public CrucibleRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
 
             int i = buffer.readVarInt();
             NonNullList<Ingredient> inputItem = NonNullList.withSize(i, Ingredient.EMPTY);
 
             for (int j = 0; j < inputItem.size(); j++) {
-                inputItem.set(j, Ingredient.read(buffer));
+                inputItem.set(j, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack outputItem = buffer.readItemStack();
+            ItemStack outputItem = buffer.readItem();
             return new CrucibleRecipe(recipeId, outputItem, inputItem);
         }
 
         @Override
-        public void write(PacketBuffer buffer, CrucibleRecipe recipe) {
+        public void toNetwork(PacketBuffer buffer, CrucibleRecipe recipe) {
 
             buffer.writeVarInt(recipe.getIngredients().size());
 
             for (Ingredient ingredient : recipe.getIngredients()) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItemStack(recipe.output);
+            buffer.writeItem(recipe.output);
 
         }
     }

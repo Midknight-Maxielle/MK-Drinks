@@ -21,9 +21,9 @@ public class JuiceEquipment {
 
     public static final RegistryObject<Item> DRINKMETAL_BOW = ITEMS.register("drinkmetal_bow",
             () -> new BowItem(new Item.Properties()
-                    .group(JuiceTab.JUICEBAR)
-                    .maxStackSize(1)
-                    .maxDamage(962)
+                    .tab(JuiceTab.JUICEBAR)
+                    .stacksTo(1)
+                    .durability(962)
             ));
 
     public static final RegistryObject<Item> DRINKMETAL_BOOTS = ITEMS.register("drinkmetal_boots",
@@ -31,8 +31,8 @@ public class JuiceEquipment {
                     JuiceArmourMaterial.DRINKMETAL,
                     EquipmentSlotType.FEET,
                     new Item.Properties()
-                            .group(JuiceTab.JUICEBAR)
-                            .maxStackSize(1)
+                            .tab(JuiceTab.JUICEBAR)
+                            .stacksTo(1)
             ));
 
     public static final RegistryObject<Item> DRINKMETAL_CHEST = ITEMS.register("drinkmetal_chestplate",
@@ -40,8 +40,8 @@ public class JuiceEquipment {
                     JuiceArmourMaterial.DRINKMETAL,
                     EquipmentSlotType.CHEST,
                     new Item.Properties()
-                            .group(JuiceTab.JUICEBAR)
-                            .maxStackSize(1)
+                            .tab(JuiceTab.JUICEBAR)
+                            .stacksTo(1)
             ));
 
     public static final RegistryObject<Item> DRINKMETAL_LEGGINGS = ITEMS.register("drinkmetal_leggings",
@@ -49,8 +49,8 @@ public class JuiceEquipment {
                     JuiceArmourMaterial.DRINKMETAL,
                     EquipmentSlotType.LEGS,
                     new Item.Properties()
-                            .group(JuiceTab.JUICEBAR)
-                            .maxStackSize(1)
+                            .tab(JuiceTab.JUICEBAR)
+                            .stacksTo(1)
             ));
 
     public static final RegistryObject<Item> DRINKMETAL_HELMET = ITEMS.register("drinkmetal_helmet",
@@ -58,8 +58,8 @@ public class JuiceEquipment {
                     JuiceArmourMaterial.DRINKMETAL,
                     EquipmentSlotType.HEAD,
                     new Item.Properties()
-                            .group(JuiceTab.JUICEBAR)
-                            .maxStackSize(1)
+                            .tab(JuiceTab.JUICEBAR)
+                            .stacksTo(1)
             ));
 
 }

@@ -28,19 +28,19 @@ public class CrucibleScreen extends ContainerScreen<CrucibleContainer> {
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
+        this.renderTooltip(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
+    protected void renderBg(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1F,1F,1F,1F);
-        this.minecraft.getTextureManager().bindTexture(GUI);
-        int posX = this.guiLeft;
-        int posY = this.guiTop;
-        this.blit(matrixStack, posX, posY, 0, 0, this.xSize, this.ySize);
-        int smeltWidth = this.container.smeltProgress();
+        this.minecraft.getTextureManager().bind(GUI);
+        int posX = this.leftPos;
+        int posY = this.topPos;
+        this.blit(matrixStack, posX, posY, 0, 0, this.getXSize(), this.getYSize());
+        int smeltWidth = this.menu.smeltProgress();
 
-        if(this.container.isHeated()) {
+        if(this.menu.isHeated()) {
         // renders the Heat Icon //
             this.blit(matrixStack,
                     posX + HEAT_ICON.x,

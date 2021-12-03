@@ -4,6 +4,7 @@ import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.registry.JuiceBlocks;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -13,6 +14,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+@MethodsReturnNonnullByDefault
 public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
 
     public final static ResourceLocation UID = new ResourceLocation(Juicebar.MOD_ID, "crucible");
@@ -39,7 +41,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
 
     @Override
     public String getTitle() {
-        return JuiceBlocks.CRUCIBLE.get().getTranslatedName().getString();
+        return JuiceBlocks.CRUCIBLE.get().getName().getString();
     }
 
     @Override
@@ -55,7 +57,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
     @Override
     public void setIngredients(CrucibleRecipe recipe, IIngredients ingredients) {
         ingredients.setInputIngredients(recipe.getIngredients());
-        ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+        ingredients.setOutput(VanillaTypes.ITEM, recipe.getResultItem());
 
     }
 

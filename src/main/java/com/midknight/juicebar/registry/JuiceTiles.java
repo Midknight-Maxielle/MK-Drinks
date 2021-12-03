@@ -14,7 +14,7 @@ public class JuiceTiles {
             DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Juicebar.MOD_ID);
 
     public static final RegistryObject<TileEntityType<CrucibleTile>> CRUCIBLE_TILE =
-            TILES.register("crucible_tile", () -> TileEntityType.Builder.create(
+            TILES.register("crucible_tile", () -> TileEntityType.Builder.of(
                     CrucibleTile::new, JuiceBlocks.CRUCIBLE.get()).build(null));
 
 }

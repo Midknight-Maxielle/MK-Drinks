@@ -35,71 +35,74 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class CrucibleBlock extends HorizontalBlock {
 
     public static final EnumProperty<CrucibleLift> LIFT = EnumProperty.create("lift",CrucibleLift.class);
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
-    public static final DirectionProperty HORIZONTAL_FACING = HorizontalBlock.HORIZONTAL_FACING;
-    protected static final VoxelShape SHAPE = makeCuboidShape(3.0D,0.0D,3.0D,13.0D,12.0D,13.0D);
+    public static final DirectionProperty HORIZONTAL_FACING = HorizontalBlock.FACING;
+    protected static final VoxelShape SHAPE = box(3.0D,0.0D,3.0D,13.0D,12.0D,13.0D);
     protected static final VoxelShape SHAPE_LIFTED =
-            VoxelShapes.or(SHAPE, Block.makeCuboidShape(0.0D,-1.0D,0.0D,16.0D,0.0D,16.0D));
+            VoxelShapes.or(SHAPE, Block.box(0.0D,-1.0D,0.0D,16.0D,0.0D,16.0D));
 
     public CrucibleBlock(Properties builder) {
 
         super(builder);
-        this.setDefaultState(this.stateContainer.getBaseState()
-                .with(HORIZONTAL_FACING,Direction.NORTH)
-                .with(LIFT,CrucibleLift.NONE)
-                .with(LIT,false));
+        this.registerDefaultState(this.getStateDefinition().any()
+                .setValue(HORIZONTAL_FACING,Direction.NORTH)
+                .setValue(LIFT,CrucibleLift.NONE)
+                .setValue(LIT,false));
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(HORIZONTAL_FACING, LIFT, LIT);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context) {
-        BlockPos pos = context.getPos();
-        World world = context.getWorld();
-        BlockState state = this.getDefaultState().with(HORIZONTAL_FACING, context.getPlacementHorizontalFacing());
+        BlockPos pos = context.getClickedPos();
+        World world = context.getLevel();
+        BlockState state = this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection());
 
-        return state.with(LIFT, getLiftState(world, pos));
+        return state.setValue(LIFT, getLiftState(world, pos));
     }
 
     private CrucibleLift getLiftState(IWorld world, BlockPos pos) {
-        if (world.getBlockState(pos.down()).getBlock().isIn(BlockTags.CAMPFIRES)) {
+        if (world.getBlockState(pos.below())
+                .getBlock().is(BlockTags.CAMPFIRES)) {
             return CrucibleLift.LIFTED;
         }
         return CrucibleLift.NONE;
     }
 
-    @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos,
+    @Override @Nonnull @ParametersAreNonnullByDefault
+    public ActionResultType use(BlockState state, World world, BlockPos pos,
                                              PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 
-        if(!world.isRemote()) {
-            TileEntity tileEntity = world.getTileEntity(pos);
+        if(!world.isClientSide()) {
+            TileEntity tileEntity = world.getBlockEntity(pos);
             if(tileEntity instanceof CrucibleTile) {
                 INamedContainerProvider containerProvider = createContainerProvider(world, pos);
-                NetworkHooks.openGui(((ServerPlayerEntity)player), containerProvider, tileEntity.getPos());
+                NetworkHooks.openGui(((ServerPlayerEntity)player), containerProvider, tileEntity.getBlockPos());
             } else { throw new IllegalStateException("Container provider missing!"); }
         }
         return ActionResultType.SUCCESS;
     }
 
-    @Override
+    @Override @Nonnull @ParametersAreNonnullByDefault
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
 
-    @Override
+    @Override @Nonnull @ParametersAreNonnullByDefault
     public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-        if(state.get(LIFT) == CrucibleLift.LIFTED) {
+        if(state.getValue(LIFT) == CrucibleLift.LIFTED) {
             return SHAPE_LIFTED;
         }
         return SHAPE;
@@ -107,22 +110,26 @@ public class CrucibleBlock extends HorizontalBlock {
 
     private INamedContainerProvider createContainerProvider(World world, BlockPos pos) {
         return new INamedContainerProvider() {
-            @Override
+
+            @Override @Nonnull
             public ITextComponent getDisplayName() {
                 return new TranslationTextComponent("screen.juicebar.crucible");
             }
-            @Nullable
-            @Override
+
+            @Override @Nonnull @ParametersAreNonnullByDefault
             public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-                CrucibleTile crucibleTile = (CrucibleTile) world.getTileEntity(pos);
-                IIntArray crucibleData = crucibleTile.getCrucibleData();
+
+                CrucibleTile crucibleTile = (CrucibleTile) world.getBlockEntity(pos);
+                IIntArray crucibleData = null;
+                if (crucibleTile != null) {
+                    crucibleData = crucibleTile.getCrucibleData();
+                }
                 return new CrucibleContainer(i, world, pos, playerInventory, playerEntity, crucibleData, crucibleTile);
             }
         };
     }
 
-    @Nullable
-    @Override
+    @Override @Nullable
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return JuiceTiles.CRUCIBLE_TILE.get().create();
     }
@@ -132,14 +139,14 @@ public class CrucibleBlock extends HorizontalBlock {
         return true;
     }
 
-    @Override
-    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    @Override @ParametersAreNonnullByDefault
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 
         if(Screen.hasShiftDown()) {
             tooltip.add(new TranslationTextComponent("tooltip.juicebar.crucible_shift"));
         } else {
             tooltip.add(new TranslationTextComponent("tooltip.juicebar.crucible"));
         }
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+        super.appendHoverText(stack, worldIn, tooltip, flagIn);
     }
 }
