@@ -8,9 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 
+import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -18,9 +18,15 @@ import javax.annotation.Nullable;
 
 public class JuiceTags {
 
-    public static class Blocks extends BlockTagsProvider {
+    public static final Tag.Named<Block> HEAT_SOURCE = makeTag("heat_sources");
 
-        public Blocks(DataGenerator generatorIn, String modId, @Nullable ExistingFileHelper existingFileHelper) {
+    private static Tag.Named<Block> makeTag(String name) {
+        return BlockTags.bind(Juicebar.MOD_ID + ":" + name);
+    }
+
+    public static class BlocksTags extends BlockTagsProvider {
+
+        public BlocksTags(DataGenerator generatorIn, String modId, @Nullable ExistingFileHelper existingFileHelper) {
             super(generatorIn, modId, existingFileHelper);
         }
 
@@ -30,21 +36,10 @@ public class JuiceTags {
         }
 
         protected void registerHeatSources() {
-            tag(JuiceTags.Blocks.HEAT_SOURCES)
+            tag(HEAT_SOURCE)
                     .add(net.minecraft.world.level.block.Blocks.LAVA)
                     .addTag(net.minecraft.tags.BlockTags.CAMPFIRES)
                     .addTag(net.minecraft.tags.BlockTags.FIRE);
-        }
-
-        private static Tags.IOptionalNamedTag<Block> createTag(String name) {
-            return BlockTags.createOptional(new ResourceLocation(Juicebar.MOD_ID, name));
-        }
-
-        private static final Tags.IOptionalNamedTag<Block> HEAT_SOURCES =
-                createTag("heat_sources");
-
-        private static Tags.IOptionalNamedTag<Block> createForgeTag(String name) {
-            return BlockTags.createOptional(new ResourceLocation("forge", name));
         }
     }
 
@@ -56,7 +51,6 @@ public class JuiceTags {
         private static Tags.IOptionalNamedTag<Item> createTag(String name) {
             return ItemTags.createOptional(new ResourceLocation(Juicebar.MOD_ID, name));
         }
-
         private static Tags.IOptionalNamedTag<Item> createForgeTag(String name) {
             return ItemTags.createOptional(new ResourceLocation("forge", name));
         }

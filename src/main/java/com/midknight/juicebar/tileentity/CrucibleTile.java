@@ -28,7 +28,7 @@ import java.util.Optional;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class CrucibleTile extends BlockEntity implements IHeatableTile {
+public class CrucibleTile extends BlockEntity implements HeatableEntityInterface {
 
     // Fields
     private final ItemStackHandler itemHandler = createHandler();
