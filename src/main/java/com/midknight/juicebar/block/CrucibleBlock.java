@@ -2,7 +2,7 @@ package com.midknight.juicebar.block;
 
 import com.midknight.juicebar.block.state.CrucibleLift;
 import com.midknight.juicebar.container.CrucibleContainer;
-import com.midknight.juicebar.tileentity.CrucibleTile;
+import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
 import com.midknight.juicebar.registry.JuiceTiles;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -94,7 +94,7 @@ public class CrucibleBlock extends BaseEntityBlock {
 
         if (!world.isClientSide()) {
             BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof CrucibleTile) {
+            if (tileEntity instanceof CrucibleBlockEntity) {
                 MenuProvider containerProvider = createContainerProvider(world, pos);
                 NetworkHooks.openGui(((ServerPlayer) player), containerProvider, tileEntity.getBlockPos());
             } else {
@@ -135,12 +135,12 @@ public class CrucibleBlock extends BaseEntityBlock {
             @ParametersAreNonnullByDefault
             public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
 
-                CrucibleTile crucibleTile = (CrucibleTile) world.getBlockEntity(pos);
+                CrucibleBlockEntity crucibleBlockEntity = (CrucibleBlockEntity) world.getBlockEntity(pos);
                 ContainerData crucibleData = null;
-                if (crucibleTile != null) {
-                    crucibleData = crucibleTile.getCrucibleData();
+                if (crucibleBlockEntity != null) {
+                    crucibleData = crucibleBlockEntity.getCrucibleData();
                 }
-                return new CrucibleContainer(i, world, pos, playerInventory, playerEntity, crucibleData, crucibleTile);
+                return new CrucibleContainer(i, world, pos, playerInventory, playerEntity, crucibleData, crucibleBlockEntity);
             }
         };
     }
@@ -166,7 +166,7 @@ public class CrucibleBlock extends BaseEntityBlock {
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> entityType) {
 
-        return createTickerHelper(entityType, JuiceTiles.CRUCIBLE_TILE.get(), CrucibleTile::tick);
+        return createTickerHelper(entityType, JuiceTiles.CRUCIBLE_TILE.get(), CrucibleBlockEntity::cookTick);
     }
 }
 

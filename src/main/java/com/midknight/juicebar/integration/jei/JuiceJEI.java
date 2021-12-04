@@ -3,17 +3,18 @@ package com.midknight.juicebar.integration.jei;
 import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
 import com.midknight.juicebar.registry.JuiceRecipes;
-import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -43,11 +44,11 @@ public class JuiceJEI implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        ClientWorld world = Minecraft.getInstance().level;
+        ClientLevel world = Minecraft.getInstance().level;
         if(world != null) {
             RecipeManager recipeManager = world.getRecipeManager();
 
-            List<IRecipe<?>> crucibleRecipes = recipeManager.getRecipes().stream()
+            List<Recipe<?>> crucibleRecipes = recipeManager.getRecipes().stream()
                     .filter(r -> r.getType() == CrucibleRecipe.TYPE).collect(Collectors.toList());
             registration.addRecipes(crucibleRecipes, JuiceRecipes.CRUCIBLE_RECIPE.getId());
         }

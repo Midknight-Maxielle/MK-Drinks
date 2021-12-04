@@ -2,7 +2,7 @@ package com.midknight.juicebar.container;
 
 import com.midknight.juicebar.registry.JuiceBlocks;
 import com.midknight.juicebar.registry.JuiceContainers;
-import com.midknight.juicebar.tileentity.CrucibleTile;
+import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +21,7 @@ public class CrucibleContainer extends AbstractContainerMenu {
 
     // - - - - - // Variable Declaration // - - - - - //
 
-    public final CrucibleTile tileEntity;
+    public final CrucibleBlockEntity tileEntity;
     private final Player playerEntity;
     private final IItemHandler playerInventory;
     protected final ContainerData crucibleData;
@@ -32,7 +32,7 @@ public class CrucibleContainer extends AbstractContainerMenu {
                              Inventory playerInventory,
                              Player player,
                              ContainerData crucibleDataIn,
-                             CrucibleTile tileEntity)
+                             CrucibleBlockEntity tileEntity)
     {
         super(JuiceContainers.CRUCIBLE_CONTAINER.get(), windowId);
         this.tileEntity = tileEntity;

@@ -2,7 +2,7 @@ package com.midknight.juicebar.registry;
 
 import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.container.CrucibleContainer;
-import com.midknight.juicebar.tileentity.CrucibleTile;
+import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
@@ -21,8 +21,8 @@ public class JuiceContainers {
                     () -> IForgeContainerType.create((windowId, inv, data) -> {
 
                         BlockPos pos = data.readBlockPos();
-                        CrucibleTile crucibleTile = (CrucibleTile) inv.player.getCommandSenderWorld().getBlockEntity(pos);
-                        ContainerData dataArray = crucibleTile.getCrucibleData();
+                        CrucibleBlockEntity crucibleBlockEntity = (CrucibleBlockEntity) inv.player.getCommandSenderWorld().getBlockEntity(pos);
+                        ContainerData dataArray = crucibleBlockEntity.getCrucibleData();
 
                         return new CrucibleContainer(
                                 windowId,
@@ -31,7 +31,7 @@ public class JuiceContainers {
                                 inv,
                                 inv.player,
                                 dataArray,
-                                crucibleTile);
+                                crucibleBlockEntity);
                     }
 
             ));

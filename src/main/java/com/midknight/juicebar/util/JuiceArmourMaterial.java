@@ -36,7 +36,7 @@ public enum JuiceArmourMaterial implements ArmorMaterial {
     private final SoundEvent soundEvent;
     private final float toughness;
     private final float knockbackResistance;
-    private final Lazy<Ingredient> repairMaterial;
+    private final Supplier<Ingredient> repairMaterial;
 
     JuiceArmourMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial) {
         this.name = name;
@@ -46,7 +46,7 @@ public enum JuiceArmourMaterial implements ArmorMaterial {
         this.soundEvent = soundEvent;
         this.toughness = toughness;
         this.knockbackResistance = knockbackResistance;
-        this.repairMaterial = (Lazy<Ingredient>) repairMaterial;
+        this.repairMaterial = repairMaterial;
     }
 
     public int getDurabilityForSlot(EquipmentSlot slotIn) {

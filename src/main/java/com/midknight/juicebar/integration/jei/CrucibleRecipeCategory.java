@@ -3,17 +3,22 @@ package com.midknight.juicebar.integration.jei;
 import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.registry.JuiceBlocks;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import mcp.MethodsReturnNonnullByDefault;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+
+@ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
 
@@ -40,8 +45,8 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
     }
 
     @Override
-    public String getTitle() {
-        return JuiceBlocks.CRUCIBLE.get().getName().getString();
+    public Component getTitle() {
+        return JuiceBlocks.CRUCIBLE.get().getName();
     }
 
     @Override
@@ -71,7 +76,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
     }
 
     @Override
-    public void draw(CrucibleRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(CrucibleRecipe recipe, PoseStack matrixStack, double mouseX, double mouseY) {
 
         this.heat.draw(matrixStack, 74,57);
 
