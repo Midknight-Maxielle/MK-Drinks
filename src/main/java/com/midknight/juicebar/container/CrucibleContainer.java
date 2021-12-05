@@ -3,88 +3,100 @@ package com.midknight.juicebar.container;
 import com.midknight.juicebar.registry.JuiceBlocks;
 import com.midknight.juicebar.registry.JuiceContainers;
 import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CrucibleContainer extends AbstractContainerMenu {
 
-    // - - - - - // Variable Declaration // - - - - - //
+    // ------ |
+    // Fields |
+    // ------ |
 
-    public final CrucibleBlockEntity tileEntity;
-    private final Player playerEntity;
+    public final CrucibleBlockEntity crucibleEntity;
+    private final ContainerData crucibleData;
     private final IItemHandler playerInventory;
-    protected final ContainerData crucibleData;
+    private final ContainerLevelAccess canInteractWithCallable;
 
-    public CrucibleContainer(int windowId,
-                             Level world,
-                             BlockPos pos,
-                             Inventory playerInventory,
-                             Player player,
-                             ContainerData crucibleDataIn,
-                             CrucibleBlockEntity tileEntity)
-    {
-        super(JuiceContainers.CRUCIBLE_CONTAINER.get(), windowId);
-        this.tileEntity = tileEntity;
-        playerEntity = player;
-        this.crucibleData = crucibleDataIn;
+    // ------------------- |
+    // Constructor Methods |
+    // ------------------- |
+
+    public CrucibleContainer(final int windowID, final Inventory playerInventory, final CrucibleBlockEntity crucibleEntity, ContainerData crucibleData) {
+        super(JuiceContainers.CRUCIBLE_CONTAINER.get(), windowID);
+        this.crucibleEntity = crucibleEntity;
+        this.crucibleData = crucibleData;
         this.playerInventory = new InvWrapper(playerInventory);
+        this.canInteractWithCallable = ContainerLevelAccess.create(crucibleEntity.getLevel(), crucibleEntity.getBlockPos());
 
         this.addDataSlots(crucibleData);
         this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return tileEntity.getCrucibleData().get(1);
-
+                return crucibleEntity.getCrucibleData().get(1);
             }
-
             @Override
             public void set(int value) {
-                tileEntity.getCrucibleData().set(1,value);
+                crucibleEntity.getCrucibleData().set(1, value);
             }
         });
-
         layoutPlayerInventorySlots(8, 86);
-
         this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
                 return smeltProgress();
             }
-
             @Override
             public void set(int value) {
-                tileEntity.getCrucibleData().set(0, value);
+                crucibleEntity.getCrucibleData().set(0, value);
             }
         });
 
         // - - - - - // Item Slot Handlers // - - - - - //
         // Adds slots to the Container; Add a new or remove addSlot lines to add or remove slots.
 
+        crucibleEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            addSlot(new SlotItemHandler(h, 0, 53, 43));
+            addSlot(new SlotItemHandler(h, 1, 108, 43));
+        });
+    }
 
-        if(tileEntity != null) {
-            tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                addSlot(new SlotItemHandler(h, 0, 53, 43));
-                addSlot(new SlotItemHandler(h, 1, 108, 43));
-            });
+    public CrucibleContainer(int windowID, Inventory inventory, FriendlyByteBuf data) {
+        this(windowID, inventory, getCrucibleEntity(inventory, data), new SimpleContainerData(4));
+    }
+
+    // ------------- |
+    // Getter Method |
+    // ------------- |
+
+    private static CrucibleBlockEntity getCrucibleEntity(Inventory inventory, FriendlyByteBuf data) {
+        BlockEntity blockEntity = inventory.player.level.getBlockEntity(data.readBlockPos());
+        if(blockEntity instanceof CrucibleBlockEntity) {
+            return (CrucibleBlockEntity) blockEntity;
+        } else {
+            throw new IllegalStateException("Block Entity is not a Crucible.");
         }
     }
 
-
-    @Override @ParametersAreNonnullByDefault
+    @Override
     public boolean stillValid(Player player) {
-        if(tileEntity.getLevel() != null) {
-            return stillValid(ContainerLevelAccess.create(tileEntity.getLevel(), tileEntity.getBlockPos()
+        if(crucibleEntity.getLevel() != null) {
+            return stillValid(ContainerLevelAccess.create(crucibleEntity.getLevel(), crucibleEntity.getBlockPos()
             ), player, JuiceBlocks.CRUCIBLE.get());
         } else {
             return false;
@@ -123,7 +135,7 @@ public class CrucibleContainer extends AbstractContainerMenu {
     }
 
     public boolean isHeated() {
-        return this.tileEntity.isHeated();
+        return this.crucibleEntity.getHeated();
 
     }
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
@@ -173,7 +185,7 @@ public class CrucibleContainer extends AbstractContainerMenu {
         } else {
             sourceSlot.setChanged();
         }
-        sourceSlot.onTake(playerEntity, sourceStack);
+        sourceSlot.onTake(playerIn, sourceStack);
         return copyOfSourceStack;
     }
 }

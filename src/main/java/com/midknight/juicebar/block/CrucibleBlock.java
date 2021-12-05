@@ -4,6 +4,8 @@ import com.midknight.juicebar.block.state.CrucibleLift;
 import com.midknight.juicebar.container.CrucibleContainer;
 import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
 import com.midknight.juicebar.registry.JuiceTiles;
+import com.midknight.juicebar.util.JuiceTags;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,17 +26,17 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -46,80 +48,113 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CrucibleBlock extends BaseEntityBlock {
 
-    public static final EnumProperty<CrucibleLift> LIFT = EnumProperty.create("lift", CrucibleLift.class);
+    // ------ |
+    // Fields |
+    // ------ |
+
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
-    public static final DirectionProperty HORIZONTAL_FACING = HorizontalDirectionalBlock.FACING;
-    protected static final VoxelShape SHAPE = box(3.0D, 0.0D, 3.0D, 13.0D, 12.0D, 13.0D);
-    protected static final VoxelShape SHAPE_LIFTED =
-            Shapes.or(SHAPE, Block.box(0.0D, -1.0D, 0.0D, 16.0D, 0.0D, 16.0D));
+    public static final EnumProperty<CrucibleLift> CRUCIBLE_LIFT = EnumProperty.create("lift", CrucibleLift.class);
 
-    public CrucibleBlock(Properties builder) {
+    protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 12.0D, 13.0D);
+    protected static final VoxelShape LIFTED_SHAPE = Shapes.or(SHAPE, Block.box(0.0D, -1.0D, 0.0D, 16.0D, 0.0D, 16.0D));
 
-        super(builder);
-        this.registerDefaultState(this.getStateDefinition().any()
-                .setValue(HORIZONTAL_FACING, Direction.NORTH)
-                .setValue(LIFT, CrucibleLift.NONE)
-                .setValue(LIT, false));
+    // ------------------- |
+    // Constructor Methods |
+    // ------------------- |
+
+    public CrucibleBlock() {
+        super(Properties.of(Material.METAL).strength(0.5F, 4.0F).sound(SoundType.LANTERN));
+        this.registerDefaultState(this.stateDefinition.any()
+            .setValue(FACING, Direction.NORTH)
+            .setValue(CRUCIBLE_LIFT, CrucibleLift.NONE)
+            .setValue(LIT, false));
+    }
+
+    // ---------- |
+    // Use Method |
+    // ---------- |
+
+    @Override
+    public InteractionResult use(BlockState state, Level world, BlockPos position, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!world.isClientSide()) {
+            BlockEntity blockEntity = world.getBlockEntity(position);
+            if (blockEntity instanceof CrucibleBlockEntity) {
+                CrucibleBlockEntity crucibleEntity = (CrucibleBlockEntity) blockEntity;
+                NetworkHooks.openGui((ServerPlayer) player, crucibleEntity, blockEntity.getBlockPos());
+            } else {
+                throw new IllegalStateException("Menu provider missing!");
+            }
+        } else {
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    // ------------- |
+    // Shape Methods |
+    // ------------- |
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(HORIZONTAL_FACING, LIFT, LIT);
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos position, CollisionContext context) {
+        return SHAPE;
     }
 
-    @Nullable
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+        if (state.getValue(CRUCIBLE_LIFT) == CrucibleLift.LIFTED) {
+            return LIFTED_SHAPE;
+        } else {
+            return SHAPE;
+        }
+    }
+
+    // ------------- |
+    // State Methods |
+    // ------------- |
+
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos pos = context.getClickedPos();
         Level world = context.getLevel();
-        BlockState state = this.defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection());
+        BlockState state = this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
 
-        return state.setValue(LIFT, getLiftState(world, pos));
+        return state.setValue(CRUCIBLE_LIFT, getLiftState(world, pos));
+    }
+
+    private boolean isSource(Block block) {
+        if((block == Blocks.LAVA) ||
+                (block == Blocks.CAMPFIRE) ||
+                (block == Blocks.SOUL_CAMPFIRE) ||
+                (block == Blocks.FIRE)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private CrucibleLift getLiftState(LevelAccessor world, BlockPos pos) {
-        if (world.getBlockState(pos.below()).getBlock().getTags().contains(BlockTags.CAMPFIRES)) {
+        if(isSource(world.getBlockState(pos.below()).getBlock())) {
             return CrucibleLift.LIFTED;
         }
         return CrucibleLift.NONE;
     }
 
     @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public InteractionResult use(BlockState state, Level world, BlockPos pos,
-                                 Player player, InteractionHand handIn, BlockHitResult hit) {
-
-        if (!world.isClientSide()) {
-            BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof CrucibleBlockEntity) {
-                MenuProvider containerProvider = createContainerProvider(world, pos);
-                NetworkHooks.openGui(((ServerPlayer) player), containerProvider, tileEntity.getBlockPos());
-            } else {
-                throw new IllegalStateException("Container provider missing!");
-            }
-        }
-        return InteractionResult.SUCCESS;
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, CRUCIBLE_LIFT, LIT);
     }
 
-    @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return SHAPE;
-    }
-
-    @Override
-    @Nonnull
-    @ParametersAreNonnullByDefault
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        if (state.getValue(LIFT) == CrucibleLift.LIFTED) {
-            return SHAPE_LIFTED;
-        }
-        return SHAPE;
-    }
+    // Create Methods |
 
     private MenuProvider createContainerProvider(Level world, BlockPos pos) {
         return new MenuProvider() {
@@ -133,14 +168,14 @@ public class CrucibleBlock extends BaseEntityBlock {
             @Override
             @Nonnull
             @ParametersAreNonnullByDefault
-            public AbstractContainerMenu createMenu(int i, Inventory playerInventory, Player playerEntity) {
+            public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player playerEntity) {
 
                 CrucibleBlockEntity crucibleBlockEntity = (CrucibleBlockEntity) world.getBlockEntity(pos);
-                ContainerData crucibleData = null;
                 if (crucibleBlockEntity != null) {
-                    crucibleData = crucibleBlockEntity.getCrucibleData();
+                    ContainerData crucibleData = crucibleBlockEntity.getCrucibleData();
+                    return new CrucibleContainer(id, playerInventory, crucibleBlockEntity, crucibleData);
                 }
-                return new CrucibleContainer(i, world, pos, playerInventory, playerEntity, crucibleData, crucibleBlockEntity);
+                throw new IllegalStateException("Menu cannot be created - crucibleBlockEntity = null!");
             }
         };
     }

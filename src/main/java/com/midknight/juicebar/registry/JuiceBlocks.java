@@ -48,10 +48,7 @@ public class JuiceBlocks {
     // - - - - -  Tile Entity Blocks - - - - - //
     // - - - - - - - - - - - - - - - - - - - - //
 
-    public static final RegistryObject<CrucibleBlock> CRUCIBLE = registerBlock("crucible_block",
-            () -> new CrucibleBlock(BlockBehaviour
-                    .Properties.of(Material.CLAY)
-                    .strength(4.0F)));
+    public static final RegistryObject<CrucibleBlock> CRUCIBLE = registerBlock("crucible_block", CrucibleBlock::new);
 
 
     // - - - - -  Register Methods - - - - - //

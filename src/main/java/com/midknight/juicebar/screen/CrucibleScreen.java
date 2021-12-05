@@ -29,7 +29,7 @@ public class CrucibleScreen extends AbstractContainerScreen<CrucibleContainer> {
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(PoseStack matrixStack, final int mouseX, final int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
@@ -37,6 +37,10 @@ public class CrucibleScreen extends AbstractContainerScreen<CrucibleContainer> {
 
     @Override
     protected void renderBg(PoseStack matrixStack, float partialTicks, int x, int y) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        if(this.minecraft == null) {
+            return;
+        }
         RenderSystem.setShaderTexture(0, GUI);
         int posX = this.leftPos;
         int posY = this.topPos;

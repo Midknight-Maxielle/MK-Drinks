@@ -1,18 +1,27 @@
 package com.midknight.juicebar.blockentity;
 
 import com.midknight.juicebar.block.CrucibleBlock;
+import com.midknight.juicebar.container.CrucibleContainer;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
 import com.midknight.juicebar.registry.JuiceTiles;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.Nameable;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -26,7 +35,7 @@ import java.util.Optional;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class CrucibleBlockEntity extends JuiceBlockEntity implements HeatableEntityInterface {
+public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvider, Nameable, HeatableEntityInterface {
 
     // ------ |
     // Fields |
@@ -34,11 +43,12 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements HeatableEnt
 
     private final ItemStackHandler handler = createHandler();
     private final LazyOptional<ItemStackHandler> lazyHandler = LazyOptional.of(() -> handler);
+    private final Component name = Component.nullToEmpty("screen.juicebar.crucible");
 
     protected int cookProgress;
     protected int cookTimeTotal = 150;
     protected final ContainerData crucibleData;
-    protected RecipeType<CrucibleRecipe> crucibleRecipe;
+    protected RecipeType<CrucibleRecipe> recipeType;
 
     // ------------ |
     // Constructors |
@@ -49,11 +59,6 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements HeatableEnt
         this.crucibleData = createContainerData();
     }
 
-    public CrucibleBlockEntity(BlockPos pos, BlockState state, RecipeType<CrucibleRecipe> recipeType) {
-        super(JuiceTiles.CRUCIBLE_TILE.get(), pos, state);
-        this.crucibleRecipe = recipeType;
-        this.crucibleData = createContainerData();
-    }
     // ---------------- |
     // Compound Methods |
     // ---------------- |
@@ -145,18 +150,23 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements HeatableEnt
     public ContainerData getCrucibleData() {
         return crucibleData;
     }
+    public ItemStackHandler getHandler() { return handler; }
 
     // ------------ |
     // Tick Methods |
     // ------------ |
 
     protected boolean hasInput() {
-        return handler.getStackInSlot(0).isEmpty();
+
+        if(handler.getStackInSlot(0).isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
-    public boolean isHeated() {
-        if (level != null) {
-            return isHeated(level, worldPosition);
+    public boolean getHeated() {
+        if(this.level != null) {
+            return isHeated(this.level, this.worldPosition);
         }
         return false;
     }
@@ -169,33 +179,56 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements HeatableEnt
 
         ItemStackHandler handler = crucible.handler;
         SimpleContainer inventory = new SimpleContainer(handler.getSlots());
-        Optional<CrucibleRecipe> recipe;
 
         // ------ |
         // Method |
         // ------ |
 
         for(int i =0; i < handler.getSlots(); i++) { inventory.setItem(i, handler.getStackInSlot(i));}
-        if(crucible.hasInput() && crucible.isHeated()) {
-            recipe = world.getRecipeManager().getRecipeFor(crucible.crucibleRecipe, new RecipeWrapper(handler), world);
-            recipe.ifPresent(Recipe -> {
-                ItemStack result = Recipe.getResultItem();
-                //crucibleProcess unpack here
-                if(crucible.isHeated()) {
-                    if(crucible.cookProgress >= crucible.cookTimeTotal) {
-                        handler.extractItem(0, 1, false);
-                        handler.insertItem(1, result, false);
-                        crucible.cookProgress = 0;
-                        world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, false));
-                    } else {
-                        crucible.cookProgress++;
-                        world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, true));
+        if(crucible.level != null) {
+
+            if (crucible.hasInput() && crucible.getHeated()) {
+
+                Optional<CrucibleRecipe> recipe = crucible.level.getRecipeManager().getRecipeFor(CrucibleRecipe.TYPE, new RecipeWrapper(handler), world);
+                System.out.println(recipe);
+                recipe.ifPresent(Recipe -> {
+                    ItemStack result = Recipe.getResultItem();
+                    if (crucible.getHeated()) {
+                        if (crucible.cookProgress == crucible.cookTimeTotal) {
+                            handler.extractItem(0, 1, false);
+                            handler.insertItem(1, result, false);
+                            world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, false));
+                            crucible.cookProgress = 0;
+                        } else {
+                            world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, true));
+                            crucible.cookProgress++;
+                        }
                     }
-                }
-            });
-        } else {
-            crucible.cookProgress = 0;
-            world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, false));
+                });
+            } else {
+                crucible.cookProgress = 0;
+                world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, false));
+            }
         }
+    }
+
+    // ------------ |
+    // Menu Methods |
+    // ------------ |
+
+    @Override
+    public Component getName() {
+        return name;
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return getName();
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
+        return new CrucibleContainer(id, playerInv, this, crucibleData);
     }
 }
