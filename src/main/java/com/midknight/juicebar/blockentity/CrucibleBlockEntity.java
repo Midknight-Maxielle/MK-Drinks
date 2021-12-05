@@ -43,10 +43,10 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
 
     private final ItemStackHandler handler = createHandler();
     private final LazyOptional<ItemStackHandler> lazyHandler = LazyOptional.of(() -> handler);
-    private final Component name = Component.nullToEmpty("screen.juicebar.crucible");
+    private final Component name = Component.nullToEmpty("Crucible");
 
     protected int cookProgress;
-    protected int cookTimeTotal = 150;
+    protected int cookTimeTotal = 200;
     protected final ContainerData crucibleData;
     protected RecipeType<CrucibleRecipe> recipeType;
 
@@ -190,18 +190,17 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
             if (crucible.hasInput() && crucible.getHeated()) {
 
                 Optional<CrucibleRecipe> recipe = crucible.level.getRecipeManager().getRecipeFor(CrucibleRecipe.TYPE, new RecipeWrapper(handler), world);
-                System.out.println(recipe);
                 recipe.ifPresent(Recipe -> {
                     ItemStack result = Recipe.getResultItem();
                     if (crucible.getHeated()) {
                         if (crucible.cookProgress == crucible.cookTimeTotal) {
                             handler.extractItem(0, 1, false);
                             handler.insertItem(1, result, false);
-                            world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, false));
                             crucible.cookProgress = 0;
+                            world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, false));
                         } else {
-                            world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, true));
                             crucible.cookProgress++;
+                            world.setBlockAndUpdate(crucible.getBlockPos(), crucible.getBlockState().setValue(CrucibleBlock.LIT, true));
                         }
                     }
                 });
