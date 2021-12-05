@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -17,10 +17,24 @@ public class JuiceBlockEntity extends BlockEntity {
         super(blockEntityType, position, state);
     }
 
-    @Nullable
+    public void writeUpdateTag(CompoundTag tag) {}
+
     @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return new ClientboundBlockEntityDataPacket(worldPosition, 1, getUpdateTag());
+    public final @NotNull ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create((BlockEntity) this, JuiceBlockEntity::createUpdateTag);
+    }
+
+    private CompoundTag createUpdateTag() {
+        BlockEntity self = (BlockEntity) this;
+        return createUpdateTag(self);
+    }
+
+    private static CompoundTag createUpdateTag(BlockEntity blockEntity) {
+        var tag = new CompoundTag();
+        if(blockEntity instanceof JuiceBlockEntity juiceBlockEntity) {
+            juiceBlockEntity.writeUpdateTag(tag);
+        }
+        return tag;
     }
 
     @Override
@@ -33,10 +47,4 @@ public class JuiceBlockEntity extends BlockEntity {
         load(pkt.getTag());
     }
 
-    protected void inventoryChanged() {
-        super.setChanged();
-        if(level != null) {
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
-        }
-    }
 }

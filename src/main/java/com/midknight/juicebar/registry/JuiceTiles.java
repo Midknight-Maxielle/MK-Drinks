@@ -3,9 +3,9 @@ package com.midknight.juicebar.registry;
 import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class JuiceTiles {
 
