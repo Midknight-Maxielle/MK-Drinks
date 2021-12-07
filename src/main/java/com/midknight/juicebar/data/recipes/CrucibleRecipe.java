@@ -3,7 +3,7 @@ package com.midknight.juicebar.data.recipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.midknight.juicebar.registry.JuiceBlocks;
+import com.midknight.juicebar.registry.RegistryBlocks;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -56,7 +56,7 @@ public class CrucibleRecipe implements ICrucibleRecipe{
     }
 
     @Override
-    public ItemStack getToastSymbol() { return new ItemStack(JuiceBlocks.CRUCIBLE.get()); }
+    public ItemStack getToastSymbol() { return new ItemStack(RegistryBlocks.CRUCIBLE.get()); }
 
     @Override
     public ResourceLocation getId() {

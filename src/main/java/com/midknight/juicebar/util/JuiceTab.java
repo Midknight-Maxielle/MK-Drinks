@@ -1,6 +1,6 @@
 package com.midknight.juicebar.util;
 
-import com.midknight.juicebar.registry.JuiceMiscItems;
+import com.midknight.juicebar.registry.RegistryMiscItems;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,7 +12,7 @@ public class JuiceTab {
 
         @Override @Nonnull
         public ItemStack makeIcon() {
-            return new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
+            return new ItemStack(RegistryMiscItems.JUICE_BOTTLE.get());
         }
     };
 }

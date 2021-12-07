@@ -1,10 +1,9 @@
 package com.midknight.juicebar.block;
 
 import com.midknight.juicebar.block.state.CrucibleLift;
-import com.midknight.juicebar.container.CrucibleContainer;
+import com.midknight.juicebar.menu.CrucibleMenu;
 import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
-import com.midknight.juicebar.registry.JuiceTiles;
-import com.midknight.juicebar.util.JuiceTags;
+import com.midknight.juicebar.registry.RegistryBE;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -12,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -173,7 +171,7 @@ public class CrucibleBlock extends BaseEntityBlock {
                 CrucibleBlockEntity crucibleBlockEntity = (CrucibleBlockEntity) world.getBlockEntity(pos);
                 if (crucibleBlockEntity != null) {
                     ContainerData crucibleData = crucibleBlockEntity.getCrucibleData();
-                    return new CrucibleContainer(id, playerInventory, crucibleBlockEntity, crucibleData);
+                    return new CrucibleMenu(id, playerInventory, crucibleBlockEntity, crucibleData);
                 }
                 throw new IllegalStateException("Menu cannot be created - crucibleBlockEntity = null!");
             }
@@ -195,13 +193,13 @@ public class CrucibleBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return JuiceTiles.CRUCIBLE_TILE.get().create(pos, state);
+        return RegistryBE.CRUCIBLE_TILE.get().create(pos, state);
     }
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> entityType) {
 
-        return createTickerHelper(entityType, JuiceTiles.CRUCIBLE_TILE.get(), CrucibleBlockEntity::cookTick);
+        return createTickerHelper(entityType, RegistryBE.CRUCIBLE_TILE.get(), CrucibleBlockEntity::cookTick);
     }
 }
 

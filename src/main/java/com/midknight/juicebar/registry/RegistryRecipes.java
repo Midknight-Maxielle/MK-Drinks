@@ -9,7 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class JuiceRecipes {
+public class RegistryRecipes {
 
     public static final DeferredRegister<RecipeSerializer<?>> RECIPES =
         DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Juicebar.MOD_ID);

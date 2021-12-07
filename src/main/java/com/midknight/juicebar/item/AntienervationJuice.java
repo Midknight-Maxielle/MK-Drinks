@@ -1,6 +1,6 @@
 package com.midknight.juicebar.item;
 
-import com.midknight.juicebar.registry.JuiceMiscItems;
+import com.midknight.juicebar.registry.RegistryMiscItems;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffects;
@@ -34,10 +34,10 @@ public class AntienervationJuice extends JuiceItem {
             entityLiving.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
         }
         if (stack.isEmpty()) {
-            return new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
+            return new ItemStack(RegistryMiscItems.JUICE_BOTTLE.get());
         } else {
             if (entityLiving instanceof Player && !((Player)entityLiving).getAbilities().instabuild) {
-                ItemStack itemstack = new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
+                ItemStack itemstack = new ItemStack(RegistryMiscItems.JUICE_BOTTLE.get());
                 Player playerentity = (Player)entityLiving;
                 if (!playerentity.getInventory().add(itemstack)) {
                     playerentity.drop(itemstack, false);

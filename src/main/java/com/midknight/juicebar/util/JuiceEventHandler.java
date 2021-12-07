@@ -1,6 +1,6 @@
 package com.midknight.juicebar.util;
 
-import com.midknight.juicebar.registry.JuiceEffects;
+import com.midknight.juicebar.registry.RegistryMobEffects;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -13,7 +13,7 @@ public class JuiceEventHandler {
         LivingEntity player = event.getEntityLiving();
         LivingEntity attacker = player.getLastHurtByMob();
 
-        if(player.hasEffect(JuiceEffects.SPINY_EFFECT.get()) && !(attacker == null)) {
+        if(player.hasEffect(RegistryMobEffects.SPINY_EFFECT.get()) && !(attacker == null)) {
             attacker.hurt(DamageSource.CACTUS, 2.0F);
         }
     }

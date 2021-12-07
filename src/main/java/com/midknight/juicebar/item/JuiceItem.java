@@ -1,6 +1,6 @@
 package com.midknight.juicebar.item;
 
-import com.midknight.juicebar.registry.JuiceMiscItems;
+import com.midknight.juicebar.registry.RegistryMiscItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,10 +36,10 @@ public class JuiceItem extends Item {
         super.finishUsingItem(stack, worldIn, entityLiving);
 
         if (stack.isEmpty()) {
-            return new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
+            return new ItemStack(RegistryMiscItems.JUICE_BOTTLE.get());
         } else {
             if (entityLiving instanceof Player && !((Player)entityLiving).getAbilities().instabuild) {
-                ItemStack itemstack = new ItemStack(JuiceMiscItems.JUICE_BOTTLE.get());
+                ItemStack itemstack = new ItemStack(RegistryMiscItems.JUICE_BOTTLE.get());
                 Player playerentity = (Player)entityLiving;
                 if (!playerentity.getInventory().add(itemstack)) {
                     playerentity.drop(itemstack, false);

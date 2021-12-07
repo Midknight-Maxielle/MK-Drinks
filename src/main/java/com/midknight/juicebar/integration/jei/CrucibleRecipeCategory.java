@@ -1,7 +1,7 @@
 package com.midknight.juicebar.integration.jei;
 
 import com.midknight.juicebar.Juicebar;
-import com.midknight.juicebar.registry.JuiceBlocks;
+import com.midknight.juicebar.registry.RegistryBlocks;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
@@ -31,7 +31,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
 
     public CrucibleRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 5, 5, 166, 75);
-        this.icon = helper.createDrawableIngredient(new ItemStack(JuiceBlocks.CRUCIBLE.get()));
+        this.icon = helper.createDrawableIngredient(new ItemStack(RegistryBlocks.CRUCIBLE.get()));
         this.heat = helper.createDrawable(TEXTURE, 176, 13, 16, 17);
     }
     @Override
@@ -46,7 +46,7 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
 
     @Override
     public Component getTitle() {
-        return JuiceBlocks.CRUCIBLE.get().getName();
+        return RegistryBlocks.CRUCIBLE.get().getName();
     }
 
     @Override

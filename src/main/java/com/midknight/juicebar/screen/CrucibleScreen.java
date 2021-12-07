@@ -1,8 +1,8 @@
 package com.midknight.juicebar.screen;
 
 import com.midknight.juicebar.Juicebar;
+import com.midknight.juicebar.menu.CrucibleMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.midknight.juicebar.container.CrucibleContainer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,7 +15,7 @@ import java.awt.*;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class CrucibleScreen extends AbstractContainerScreen<CrucibleContainer> {
+public class CrucibleScreen extends AbstractContainerScreen<CrucibleMenu> {
 
     // Fields
     private static final ResourceLocation GUI = new ResourceLocation(Juicebar.MOD_ID, "textures/gui/crucible_gui.png");
@@ -23,8 +23,8 @@ public class CrucibleScreen extends AbstractContainerScreen<CrucibleContainer> {
     private static final Rectangle HEAT_ICON = new Rectangle(79,62,16,17);
 
     //Constructor Method
-    public CrucibleScreen(CrucibleContainer crucibleContainer, Inventory playerInventory, Component title) {
-        super(crucibleContainer, playerInventory, title);
+    public CrucibleScreen(CrucibleMenu crucibleMenu, Inventory playerInventory, Component title) {
+        super(crucibleMenu, playerInventory, title);
 
     }
 

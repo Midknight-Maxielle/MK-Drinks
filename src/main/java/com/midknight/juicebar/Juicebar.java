@@ -1,14 +1,8 @@
 package com.midknight.juicebar;
 
-import com.midknight.juicebar.registry.JuiceBlocks;
-import com.midknight.juicebar.registry.JuiceContainers;
-import com.midknight.juicebar.registry.JuiceRecipes;
-import com.midknight.juicebar.registry.JuiceEffects;
-import com.midknight.juicebar.registry.JuiceEquipment;
-import com.midknight.juicebar.registry.JuiceMiscItems;
-import com.midknight.juicebar.registry.JuiceFoods;
+import com.midknight.juicebar.registry.*;
+import com.midknight.juicebar.registry.RegistryBlocks;
 import com.midknight.juicebar.screen.CrucibleScreen;
-import com.midknight.juicebar.registry.JuiceTiles;
 import com.midknight.juicebar.util.JuiceEventHandler;
 import com.midknight.juicebar.util.JuiceItemModelProperties;
 
@@ -39,14 +33,14 @@ public class Juicebar {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
 
-        JuiceMiscItems.ITEMS.register(eventBus);
-        JuiceFoods.ITEMS.register(eventBus);
-        JuiceEquipment.ITEMS.register(eventBus);
-        JuiceBlocks.BLOCKS.register(eventBus);
-        JuiceContainers.CONTAINERS.register(eventBus);
-        JuiceTiles.BLOCK_ENTITIES.register(eventBus);
-        JuiceRecipes.RECIPES.register(eventBus);
-        JuiceEffects.EFFECTS.register(eventBus);
+        RegistryMiscItems.ITEMS.register(eventBus);
+        RegistryFoodItems.ITEMS.register(eventBus);
+        RegistryEquipment.ITEMS.register(eventBus);
+        RegistryBlocks.BLOCKS.register(eventBus);
+        RegistryMenus.CONTAINERS.register(eventBus);
+        RegistryBE.BLOCK_ENTITIES.register(eventBus);
+        RegistryRecipes.RECIPES.register(eventBus);
+        RegistryMobEffects.EFFECTS.register(eventBus);
 
         eventBus.addListener(this::ClientSetup);
         forgeBus.addListener(JuiceEventHandler::onPlayerHurt);
@@ -59,11 +53,11 @@ public class Juicebar {
     private void ClientSetup (final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
 
-            MenuScreens.register(JuiceContainers.CRUCIBLE_CONTAINER.get(), CrucibleScreen::new);
-            ItemBlockRenderTypes.setRenderLayer(JuiceBlocks.CRUCIBLE.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(JuiceBlocks.BOTTLE_GLASS.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(JuiceBlocks.BOTTLE_GLASS_PANE.get(), RenderType.cutout());
-            JuiceItemModelProperties.makeBow(JuiceEquipment.DRINKMETAL_BOW.get());
+            MenuScreens.register(RegistryMenus.CRUCIBLE_CONTAINER.get(), CrucibleScreen::new);
+            ItemBlockRenderTypes.setRenderLayer(RegistryBlocks.CRUCIBLE.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(RegistryBlocks.BOTTLE_GLASS.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(RegistryBlocks.BOTTLE_GLASS_PANE.get(), RenderType.cutout());
+            JuiceItemModelProperties.makeBow(RegistryEquipment.DRINKMETAL_BOW.get());
         });
     }
 }

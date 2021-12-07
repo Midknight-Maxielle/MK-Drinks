@@ -20,7 +20,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
-public class JuiceBlocks {
+public class RegistryBlocks {
 
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, Juicebar.MOD_ID);
@@ -34,8 +34,8 @@ public class JuiceBlocks {
                     .sound(SoundType.GLASS)
                     .strength(1.0F)
                     .noOcclusion()
-                    .isRedstoneConductor(JuiceBlocks::isntSolid)
-                    .isViewBlocking(JuiceBlocks::isntSolid)
+                    .isRedstoneConductor(RegistryBlocks::isntSolid)
+                    .isViewBlocking(RegistryBlocks::isntSolid)
             ));
 
     public static final RegistryObject<Block> BOTTLE_GLASS_PANE = registerBlock("bottle_glass_pane",
@@ -61,7 +61,7 @@ public class JuiceBlocks {
     }
 
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
-        JuiceMiscItems.ITEMS.register(name, () -> new BlockItem(block.get(),
+        RegistryMiscItems.ITEMS.register(name, () -> new BlockItem(block.get(),
                 new Item.Properties().tab(JuiceTab.JUICEBAR)));
     }
 

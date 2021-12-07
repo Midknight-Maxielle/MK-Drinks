@@ -1,10 +1,9 @@
-package com.midknight.juicebar.container;
+package com.midknight.juicebar.menu;
 
-import com.midknight.juicebar.registry.JuiceBlocks;
-import com.midknight.juicebar.registry.JuiceContainers;
+import com.midknight.juicebar.registry.RegistryBlocks;
+import com.midknight.juicebar.registry.RegistryMenus;
 import com.midknight.juicebar.blockentity.CrucibleBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -22,7 +20,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class CrucibleContainer extends AbstractContainerMenu {
+public class CrucibleMenu extends AbstractContainerMenu {
 
     // ------ |
     // Fields |
@@ -37,8 +35,8 @@ public class CrucibleContainer extends AbstractContainerMenu {
     // Constructor Methods |
     // ------------------- |
 
-    public CrucibleContainer(final int windowID, final Inventory playerInventory, final CrucibleBlockEntity crucibleEntity, ContainerData crucibleData) {
-        super(JuiceContainers.CRUCIBLE_CONTAINER.get(), windowID);
+    public CrucibleMenu(final int windowID, final Inventory playerInventory, final CrucibleBlockEntity crucibleEntity, ContainerData crucibleData) {
+        super(RegistryMenus.CRUCIBLE_CONTAINER.get(), windowID);
         this.crucibleEntity = crucibleEntity;
         this.crucibleData = crucibleData;
         this.playerInventory = new InvWrapper(playerInventory);
@@ -76,7 +74,7 @@ public class CrucibleContainer extends AbstractContainerMenu {
         });
     }
 
-    public CrucibleContainer(int windowID, Inventory inventory, FriendlyByteBuf data) {
+    public CrucibleMenu(int windowID, Inventory inventory, FriendlyByteBuf data) {
         this(windowID, inventory, getCrucibleEntity(inventory, data), new SimpleContainerData(4));
     }
 
@@ -97,7 +95,7 @@ public class CrucibleContainer extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         if(crucibleEntity.getLevel() != null) {
             return stillValid(ContainerLevelAccess.create(crucibleEntity.getLevel(), crucibleEntity.getBlockPos()
-            ), player, JuiceBlocks.CRUCIBLE.get());
+            ), player, RegistryBlocks.CRUCIBLE.get());
         } else {
             return false;
         }
@@ -140,8 +138,8 @@ public class CrucibleContainer extends AbstractContainerMenu {
     }
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
     // must assign a slot number to each of the slots used by the GUI.
-    // For this container, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.
-    // Each time we add a Slot to the container, it automatically increases the slotIndex, which means
+    // For this menu, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.
+    // Each time we add a Slot to the menu, it automatically increases the slotIndex, which means
     //  0 - 8 = hotbar slots (which will map to the InventoryPlayer slot numbers 0 - 8)
     //  9 - 35 = player inventory slots (which map to the InventoryPlayer slot numbers 9 - 35)
     //  36 - 44 = TileInventory slots, which map to our TileEntity slot numbers 0 - 8)
@@ -163,9 +161,9 @@ public class CrucibleContainer extends AbstractContainerMenu {
         ItemStack sourceStack = sourceSlot.getItem();
         ItemStack copyOfSourceStack = sourceStack.copy();
 
-        // Check if the slot clicked is one of the vanilla container slots
+        // Check if the slot clicked is one of the vanilla menu slots
         if (index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
-            // This is a vanilla container slot so merge the stack into the tile inventory
+            // This is a vanilla menu slot so merge the stack into the tile inventory
             if (!moveItemStackTo(sourceStack, TE_INVENTORY_FIRST_SLOT_INDEX, TE_INVENTORY_FIRST_SLOT_INDEX
                     + TE_INVENTORY_SLOT_COUNT, false)) {
                 return ItemStack.EMPTY;  // EMPTY_ITEM

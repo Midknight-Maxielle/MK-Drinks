@@ -1,7 +1,7 @@
 package com.midknight.juicebar.util;
 
 import com.midknight.juicebar.Juicebar;
-import com.midknight.juicebar.registry.JuiceMiscItems;
+import com.midknight.juicebar.registry.RegistryMiscItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -10,7 +10,6 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Lazy;
 
 import java.util.function.Supplier;
 
@@ -25,7 +24,7 @@ public enum JuiceArmourMaterial implements ArmorMaterial {
             SoundEvents.ARMOR_EQUIP_IRON,
             1.0F,
             0.0F,
-            () -> {return Ingredient.of(JuiceMiscItems.DRINKMETAL_INGOT.get());}
+            () -> {return Ingredient.of(RegistryMiscItems.DRINKMETAL_INGOT.get());}
     );
 
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};

@@ -1,9 +1,9 @@
 package com.midknight.juicebar.blockentity;
 
 import com.midknight.juicebar.block.CrucibleBlock;
-import com.midknight.juicebar.container.CrucibleContainer;
+import com.midknight.juicebar.menu.CrucibleMenu;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
-import com.midknight.juicebar.registry.JuiceTiles;
+import com.midknight.juicebar.registry.RegistryBE;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,11 +17,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -55,7 +53,7 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
     // ------------ |
 
     public CrucibleBlockEntity(BlockPos pos, BlockState state) {
-        super(JuiceTiles.CRUCIBLE_TILE.get(), pos, state);
+        super(RegistryBE.CRUCIBLE_TILE.get(), pos, state);
         this.crucibleData = createContainerData();
     }
 
@@ -228,6 +226,6 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-        return new CrucibleContainer(id, playerInv, this, crucibleData);
+        return new CrucibleMenu(id, playerInv, this, crucibleData);
     }
 }

@@ -2,7 +2,7 @@ package com.midknight.juicebar.integration.jei;
 
 import com.midknight.juicebar.Juicebar;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
-import com.midknight.juicebar.registry.JuiceRecipes;
+import com.midknight.juicebar.registry.RegistryRecipes;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -50,7 +50,7 @@ public class JuiceJEI implements IModPlugin {
 
             List<Recipe<?>> crucibleRecipes = recipeManager.getRecipes().stream()
                     .filter(r -> r.getType() == CrucibleRecipe.TYPE).collect(Collectors.toList());
-            registration.addRecipes(crucibleRecipes, JuiceRecipes.CRUCIBLE_RECIPE.getId());
+            registration.addRecipes(crucibleRecipes, RegistryRecipes.CRUCIBLE_RECIPE.getId());
         }
     }
 

@@ -7,7 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class JuiceMiscItems {
+public class RegistryMiscItems {
 
     // =============================== //
     // Item Registry & Register Method //
