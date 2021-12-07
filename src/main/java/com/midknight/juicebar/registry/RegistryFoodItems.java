@@ -14,7 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class JuiceFoods {
+public class RegistryFoodItems {
 
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, Juicebar.MOD_ID);
@@ -22,9 +22,7 @@ public class JuiceFoods {
     public static final RegistryObject<Item> JUICE_APPLE = ITEMS.register("juice_apple",
             () -> new JuiceItem(new Item.Properties()
                     .food(new FoodProperties.Builder()
-                            .nutrition(2).saturationMod(4F)
-                            .effect(() -> new MobEffectInstance(
-                                    MobEffects.SATURATION, 600, 0), 1.0F)
+                            .nutrition(2).saturationMod(8F)
                             .alwaysEat().build())
                     .tab(JuiceTab.JUICEBAR)
             )
@@ -66,7 +64,7 @@ public class JuiceFoods {
                     .food(new FoodProperties.Builder()
                             .nutrition(2).saturationMod(4F)
                             .effect(() -> new MobEffectInstance(
-                                    JuiceEffects.SPINY_EFFECT.get(), 600, 0), 1.0F)
+                                    RegistryMobEffects.SPINY_EFFECT.get(), 600, 0), 1.0F)
                             .alwaysEat().build())
                     .tab(JuiceTab.JUICEBAR)
             )
