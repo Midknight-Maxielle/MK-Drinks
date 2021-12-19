@@ -42,6 +42,8 @@ public class Juicebar {
         RegistryRecipes.RECIPES.register(eventBus);
         RegistryMobEffects.EFFECTS.register(eventBus);
 
+        RegistryLoot.registerGLMS();
+
         eventBus.addListener(this::ClientSetup);
         forgeBus.addListener(JuiceEventHandler::onPlayerHurt);
 
