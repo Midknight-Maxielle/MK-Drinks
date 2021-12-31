@@ -41,5 +41,26 @@
   "itemGroup.juicebarCreativeTab": "MK's Juicebar",
 
   "tooltip.juicebar.crucible":"Hold \u00A7eSHIFT\u00A7r for more information.",
-  "tooltip.juicebar.crucible_shift": "Must be placed above a campfire or similar heat source to function."
+  "tooltip.juicebar.crucible_shift": "Must be placed above a campfire or similar heat source to function.",
+
+  "tooltip.juicebar.juice_apple": "Has a highly \u00A7esaturating\u00A7r flavour.",
+  "tooltip.juicebar.juice_bamboo": "Gives the \u00A7eJump Boost\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_beetroot": "Gives the \u00A7eHero of the Village\u00A7r effect for a short time",
+  "tooltip.juicebar.juice_berry": "Cures the \u00A7ePoison\u00A7r effect.",
+  "tooltip.juicebar.juice_cactus": "Gives the \u00A7eSpiny\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_carrot": "Gives the \u00A7eNight Vision\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_cocoa": "Cures the \u00A7eWeakness\u00A7r and \u00A7eSlowness\u00A7r effects.",
+  "tooltip.juicebar.juice_egg": "Gives the \u00A7eSlow Fall\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_kelp": "Gives the \u00A7eWater Breathing\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_melon": "Gives the \u00A7eRegeneration\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_mushroom": "Gives the \u00A7eLevitation\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_pickle": "Gives the \u00A7eDolphins' Grace\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_potato": "Gives the \u00A7eResistance\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_pumpkin": "Cures the \u00A7eWither\u00A7r Effect.",
+  "tooltip.juicebar.juice_sapling": "Gives the \u00A7eStrength\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_sugar": "Gives the \u00A7eSpeed\u00A7r effect for a short time.",
+  "tooltip.juicebar.juice_wheat": "Gives the \u00A7eFire Resistance\u00A7r effect for a short time."
+
+
+
 }
