@@ -162,6 +162,13 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
         return true;
     }
 
+    protected boolean hasOutput() {
+        if(handler.getStackInSlot(1).isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean getHeated() {
         if(this.level != null) {
             return isHeated(this.level, this.worldPosition);
@@ -190,7 +197,7 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
                 Optional<CrucibleRecipe> recipe = crucible.level.getRecipeManager().getRecipeFor(CrucibleRecipe.TYPE, new RecipeWrapper(handler), world);
                 recipe.ifPresent(Recipe -> {
                     ItemStack result = Recipe.getResultItem();
-                    if (crucible.getHeated()) {
+                    if (crucible.getHeated() && (!crucible.hasOutput() || handler.getStackInSlot(1).getItem() == result.getItem())) {
                         if (crucible.cookProgress == crucible.cookTimeTotal) {
                             handler.extractItem(0, 1, false);
                             handler.insertItem(1, result, false);
