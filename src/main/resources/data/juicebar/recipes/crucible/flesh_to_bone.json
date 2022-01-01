@@ -1,0 +1,5 @@
+{
+  "type": "juicebar:crucible",
+  "ingredients": [{"item": "minecraft:rotten_flesh"}],
+  "output": {"item": "minecraft:bone"}
+}

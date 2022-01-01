@@ -1,0 +1,5 @@
+{
+  "type": "juicebar:crucible",
+  "ingredients": [{"item": "minecraft:diamond"}],
+  "output": {"item": "minecraft:ender_pearl"}
+}
