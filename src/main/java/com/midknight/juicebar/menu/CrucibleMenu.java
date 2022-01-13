@@ -46,11 +46,11 @@ public class CrucibleMenu extends AbstractContainerMenu {
         this.addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return crucibleEntity.getCrucibleData().get(1);
+                return crucibleEntity.getData().get(1);
             }
             @Override
             public void set(int value) {
-                crucibleEntity.getCrucibleData().set(1, value);
+                crucibleEntity.getData().set(1, value);
             }
         });
         layoutPlayerInventorySlots(8, 86);
@@ -61,7 +61,7 @@ public class CrucibleMenu extends AbstractContainerMenu {
             }
             @Override
             public void set(int value) {
-                crucibleEntity.getCrucibleData().set(0, value);
+                crucibleEntity.getData().set(0, value);
             }
         });
 
@@ -133,7 +133,7 @@ public class CrucibleMenu extends AbstractContainerMenu {
     }
 
     public boolean isHeated() {
-        return this.crucibleEntity.getHeated();
+        return this.crucibleEntity.getIsHeated();
 
     }
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
