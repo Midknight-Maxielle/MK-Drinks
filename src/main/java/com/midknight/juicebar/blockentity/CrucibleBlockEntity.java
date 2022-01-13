@@ -4,7 +4,6 @@ import com.midknight.juicebar.block.CrucibleBlock;
 import com.midknight.juicebar.menu.CrucibleMenu;
 import com.midknight.juicebar.data.recipes.CrucibleRecipe;
 import com.midknight.juicebar.registry.RegistryBE;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,71 +16,113 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
 public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvider, Nameable, HeatableEntityInterface {
 
-    // ------ |
-    // Fields |
-    // ------ |
+    // Fields
 
-    private final ItemStackHandler handler = createHandler();
-    private final LazyOptional<ItemStackHandler> lazyHandler = LazyOptional.of(() -> handler);
     private final Component name = Component.nullToEmpty("Crucible");
+    private LazyOptional<IItemHandler> lazyHandler = LazyOptional.empty();
+    private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
 
-    protected int cookProgress;
-    protected int cookTimeTotal = 200;
-    protected final ContainerData crucibleData;
-    protected RecipeType<CrucibleRecipe> recipeType;
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
 
-    // ------------ |
-    // Constructors |
-    // ------------ |
+        @Override
+        public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            return true;
+        }
+
+        @Nonnull
+        @Override
+        public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+            if (!isItemValid(slot, stack)) {
+                return stack;
+            }
+            return super.insertItem(slot, stack, simulate);
+        }
+    };
+
+    protected final ContainerData data;
+    private int cookProgress = 0;
+    private int cookTime = 200;
+
+    // Constructor Method
 
     public CrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(RegistryBE.CRUCIBLE_TILE.get(), pos, state);
-        this.crucibleData = createContainerData();
+        this.lazyHandler = LazyOptional.of(() -> itemHandler);
+        this.data = new ContainerData() {
+            @Override
+            public int get(int index) {
+                return switch (index) {
+                    case 0 -> CrucibleBlockEntity.this.cookProgress;
+                    case 1 -> CrucibleBlockEntity.this.cookTime;
+                    default -> 0;
+                };
+            }
+
+            @Override
+            public void set(int index, int value) {
+                switch (index) {
+                    case 0 -> CrucibleBlockEntity.this.cookProgress = value;
+                    case 1 -> CrucibleBlockEntity.this.cookTime = value;
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        };
     }
 
-    // ---------------- |
-    // Compound Methods |
-    // ---------------- |
+    // Compound Methods
 
     @Override
-    public void load(CompoundTag compound) {
-        super.load(compound);
-        cookProgress = compound.getInt("cookProgress");
-        cookTimeTotal = compound.getInt("cookTimeTotal");
-        handler.deserializeNBT(compound.getCompound("inventory"));
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        lazyHandler.invalidate();
     }
 
     @Override
-    public CompoundTag save(CompoundTag compound) {
-        super.save(compound);
-        compound.putInt("cookProgress", cookProgress);
-        compound.putInt("cookTimeTotal", cookTimeTotal);
-        compound.put("inventory", handler.serializeNBT());
-
-        return compound;
+    public void load(@NotNull CompoundTag compTag) {
+        super.load(compTag);
+        itemHandler.deserializeNBT(compTag.getCompound("inventory"));
+        cookProgress = compTag.getInt("crucible.cookProgress");
+        cookTime = compTag.getInt("crucible.cookTime");
     }
 
-    // ----------------- |
-    // Capability Method |
-    // ----------------- |
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        lazyHandler = LazyOptional.of(() -> itemHandler);
+    }
+
+    @Override
+    public void saveAdditional(@NotNull CompoundTag tag) {
+        tag.put("inventory", itemHandler.serializeNBT());
+        tag.putInt("crucible.cookProgress", cookProgress);
+        tag.putInt("crucible.cookTime", cookTime);
+        super.saveAdditional(tag);
+    }
+
+    // Capability Method
 
     @Nonnull
     @Override
@@ -93,96 +134,27 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
         }
     }
 
-    // ------------ |
-    // Data Methods |
-    // ------------ |
-
-    private ContainerData createContainerData() {
-        return new ContainerData() {
-            @Override
-            public int get(int index) {
-                return switch (index) {
-                    case 0 -> CrucibleBlockEntity.this.cookProgress;
-                    case 1 -> CrucibleBlockEntity.this.cookTimeTotal;
-                    default -> 0;
-                };
-            }
-            @Override
-            public void set(int index, int value) {
-                switch (index) {
-                    case 0 -> CrucibleBlockEntity.this.cookProgress = value;
-                    case 1 -> CrucibleBlockEntity.this.cookTimeTotal = value;
-                }
-            }
-            @Override
-            public int getCount() {
-                return 2;
-            }
-        };
-    }
-
-    private ItemStackHandler createHandler() {
-        return new ItemStackHandler(2) {
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-            }
-
-            @Override
-            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-                return true;
-            }
-
-            @Nonnull
-            @Override
-            public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-                if (!isItemValid(slot, stack)) {
-                    return stack;
-                }
-                return super.insertItem(slot, stack, simulate);
-            }
-        };
-    }
-
-    public ContainerData getCrucibleData() {
-        return crucibleData;
-    }
-    public ItemStackHandler getHandler() { return handler; }
-
-    // ------------ |
-    // Tick Methods |
-    // ------------ |
+    // Tick Methods
 
     protected boolean hasInput() {
-
-        if(handler.getStackInSlot(0).isEmpty()) {
-            return false;
-        }
-        return true;
+        return !itemHandler.getStackInSlot(0).isEmpty();
     }
 
     protected boolean hasOutput() {
-        if(handler.getStackInSlot(1).isEmpty()) {
-            return false;
-        }
-        return true;
+        return !itemHandler.getStackInSlot(1).isEmpty();
     }
 
-    public boolean getHeated() {
-        if(this.level != null) {
-            return isHeated(this.level, this.worldPosition);
-        }
-        return false;
+    public boolean getIsHeated() {
+        if(this.level == null) {return false;}
+        return isHeated(this.level, this.worldPosition);
     }
 
     public static void cookTick(Level world, BlockPos pos, BlockState state, CrucibleBlockEntity crucible) {
 
-        // ------ |
-        // Fields |
-        // ------ |
+        boolean isHeated = crucible.isHeated(world, pos);
 
-        ItemStackHandler handler = crucible.handler;
+
+        ItemStackHandler handler = crucible.itemHandler;
         SimpleContainer inventory = new SimpleContainer(handler.getSlots());
 
         // ------ |
@@ -192,13 +164,13 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
         for(int i =0; i < handler.getSlots(); i++) { inventory.setItem(i, handler.getStackInSlot(i));}
         if(crucible.level != null) {
 
-            if (crucible.hasInput() && crucible.getHeated()) {
+            if (crucible.hasInput() && isHeated) {
 
                 Optional<CrucibleRecipe> recipe = crucible.level.getRecipeManager().getRecipeFor(CrucibleRecipe.TYPE, new RecipeWrapper(handler), world);
                 recipe.ifPresent(Recipe -> {
                     ItemStack result = Recipe.getResultItem();
-                    if (crucible.getHeated() && (!crucible.hasOutput() || handler.getStackInSlot(1).getItem() == result.getItem())) {
-                        if (crucible.cookProgress == crucible.cookTimeTotal) {
+                    if ((!crucible.hasOutput() || handler.getStackInSlot(1).getItem() == result.getItem())) {
+                        if (crucible.cookProgress == crucible.cookTime) {
                             handler.extractItem(0, 1, false);
                             handler.insertItem(1, result, false);
                             crucible.cookProgress = 0;
@@ -233,6 +205,10 @@ public class CrucibleBlockEntity extends JuiceBlockEntity implements MenuProvide
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInv, Player player) {
-        return new CrucibleMenu(id, playerInv, this, crucibleData);
+        return new CrucibleMenu(id, playerInv, this, data);
+    }
+
+    public ContainerData getData() {
+        return CrucibleBlockEntity.this.data;
     }
 }

@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.8b'
+version = '0.8.1b'
 group = 'com.midknight.juicebar' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'juicebar'
 

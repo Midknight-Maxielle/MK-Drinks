@@ -170,7 +170,7 @@ public class CrucibleBlock extends BaseEntityBlock {
 
                 CrucibleBlockEntity crucibleBlockEntity = (CrucibleBlockEntity) world.getBlockEntity(pos);
                 if (crucibleBlockEntity != null) {
-                    ContainerData crucibleData = crucibleBlockEntity.getCrucibleData();
+                    ContainerData crucibleData = crucibleBlockEntity.getData();
                     return new CrucibleMenu(id, playerInventory, crucibleBlockEntity, crucibleData);
                 }
                 throw new IllegalStateException("Menu cannot be created - crucibleBlockEntity = null!");
