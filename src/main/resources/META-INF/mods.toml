@@ -6,7 +6,7 @@
 # The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
 modLoader="javafml" #mandatory
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
-loaderVersion="[38,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[40,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
 license="All rights reserved"
@@ -15,13 +15,13 @@ license="All rights reserved"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
-modId="juicebar" #mandatory
+modId="owmix" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 # ${file.jarVersion} will substitute the value of the Implementation-Version as read from the mod's JAR file metadata
 # see the associated build.gradle script for how to populate this completely automatically during a build
-version="${file.jarVersion}" #mandatory
+version="1.18.2-1.0.0" #mandatory
  # A display name for the mod
-displayName="MK's Juice Bar" #mandatory
+displayName="Overworld Mixology" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
@@ -34,22 +34,31 @@ credits="Thanks to: Kaupenjoe, GRUULBBY, Forge, and Mojang." #optional
 authors="Midknight_Maxielle" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-MK's Juice Bar is a small mod that aims to add consumable drinks with short-term potion effects that are accessible before entering the Nether.
+Overworld Mixology is a mod dedicated to bringing potion effects into the early game in new and interesting ways.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.juicebar]] #optional
+
+[[dependencies.owmix]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[38,)" #mandatory
+    versionRange="[40,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
+
+[[dependencies.archarsenal]]
+    modId="knightcore" #mandatory
+    mandatory=true
+    versionRange="[1.18.2-1.0,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+
 # Here's another dependency
-[[dependencies.juicebar]]
+[[dependencies.owmix]]
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
